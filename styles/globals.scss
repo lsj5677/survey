@@ -14,3 +14,16 @@ a {
 * {
   box-sizing: border-box;
 }
+
+ul li,
+ol li {
+  list-style: none;
+}
+
+:root {
+  --contentMaxWidth: 1200px;
+  --mainColor: #4299E1;
+  --mediumGrayColor: #A0AEC0;
+  --mediumText: 300;
+  --boldText: 500;
+}
