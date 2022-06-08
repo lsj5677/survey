@@ -30,6 +30,7 @@ const SignUp = () => {
   const onSubmit = async ({ email, password, name }: IFormInputs) => {
     try {
       const params: IReqUserCreate = { email, password, name };
+      // httpUserCreate 가 요청을 보내는 api에 사용자 등록 로직을 구현해야 합니다.
       const createRes = await httpUserCreate(params)
 
       alert('등록되었습니다.')

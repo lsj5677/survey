@@ -1,3 +1,4 @@
+import { IUserModel } from "../../share/models/user.model";
 import { UserEntity } from "../entity/user.entity";
 import { getDatabase } from "../utils/database.util";
 // import { conn } from "../utils/database.util";
@@ -40,16 +41,16 @@ import { getDatabase } from "../utils/database.util";
 //   }
 // }
 
-export const createUser = async (params?: any) => {
+export const createUser = async (params: IUserModel) => {
   try {
     const { email, password, name } = params;
     const db = await getDatabase();
     const userRepo = db.getRepository(UserEntity);
     const newUser = userRepo.create();
 
-    newUser.email = `'${params.email}'`;
-    newUser.password = `'${params.password}'`;
-    newUser.name = `'${params.name}'`;
+    newUser.email = `'${email}'`;
+    newUser.password = `'${password}'`;
+    newUser.name = `'${name}'`;
 
     // save : promise
     await userRepo.save(newUser);
