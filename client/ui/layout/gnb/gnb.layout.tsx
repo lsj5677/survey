@@ -13,7 +13,7 @@ const GnbLayout = () => {
     },
     {
       name: "Survey",
-      address: "/survey"
+      address: "/survey-board/list"
     },
     {
       name: "Q&A",
