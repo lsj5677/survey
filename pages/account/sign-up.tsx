@@ -21,12 +21,14 @@ interface IFormInputs {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-  const params: IReqUserCreate = {
-    email: '',
-    password: '',
-    name: ''
-  }
-  await createUser(params);
+
+  // ---  getServerSideProps 에 사용자 생성을 구현하면 안되요!
+  // const params: IReqUserCreate = {
+  //   email: '',
+  //   password: '',
+  //   name: ''
+  // }
+  // await createUser(params);
 
   return {
     props: {}
@@ -43,6 +45,7 @@ const SignUp = () => {
   const onSubmit = async ({ email, password, name }: IFormInputs) => {
     try {
       const params: IReqUserCreate = { email, password, name };
+      // httpUserCreate 가 요청을 보내는 api에 사용자 등록 로직을 구현해야 합니다.
       const createRes = await httpUserCreate(params)
 
       alert('등록되었습니다.')
