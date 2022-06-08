@@ -1,3 +1,4 @@
+import { createUser } from "../../server/services/user.service";
 import { IReqUserCreate } from "../../share/httpType/user.type";
 import { getHostUrl, http } from "../utils/http.util";
 

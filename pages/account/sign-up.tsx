@@ -20,19 +20,6 @@ interface IFormInputs {
   name?: string | number;
 }
 
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-  const params: IReqUserCreate = {
-    email: '',
-    password: '',
-    name: ''
-  }
-  await createUser(params);
-
-  return {
-    props: {}
-  }
-}
-
 const SignUp = () => {
 
   const { register, handleSubmit, getValues, trigger, formState: { errors, isSubmitting, dirtyFields } } = useForm<IFormInputs>();

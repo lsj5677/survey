@@ -21,7 +21,7 @@ export class UserEntity {
 
   @Column({
     type: 'varchar',
-    length: 10
+    length: 30
   })
   name?: string
 
