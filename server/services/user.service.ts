@@ -1,6 +1,7 @@
 import { IUserModel } from "../../share/models/user.model";
 import { UserEntity } from "../entity/user.entity";
 import { getDatabase } from "../utils/database.util";
+import { getExtendsRepo } from "../utils/repository.util";
 // import { conn } from "../utils/database.util";
 
 // 실질적 비지니스 로직이 이루어지는 부분
@@ -42,18 +43,13 @@ import { getDatabase } from "../utils/database.util";
 // }
 
 export const createUser = async (params: IUserModel) => {
+  console.log('params: ', params);
   try {
+
     const { email, password, name } = params;
-    const db = await getDatabase();
-    const userRepo = db.getRepository(UserEntity);
-    const newUser = userRepo.create();
 
-    newUser.email = `'${email}'`;
-    newUser.password = `'${password}'`;
-    newUser.name = `'${name}'`;
-
-    // save : promise
-    await userRepo.save(newUser);
+    const userRepo = await getExtendsRepo<UserEntity>(UserEntity)
+    const saveRes = await userRepo.createByObject({ email, password })
 
   } catch (error) {
     throw error;
