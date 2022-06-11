@@ -1,16 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
 import { GetServerSideProps, GetServerSidePropsContext } from "next"
+import { FunctionComponent } from "react"
+import { httpSurveyReadAll, httpTest } from "../../client/http/survey.http"
 import DefaultTemplate from "../../client/template/default.template"
-import { getSurveyList } from "../../server/services/survey.service"
 import { boardListStyle } from "../../styles/survey-board/list.style"
 
-interface IBoardList {
-
+interface IBoardListProps {
+  res: any
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-  const res = await getSurveyList();
+  const res = await httpSurveyReadAll();
   console.log(`SUJIN:: ~ constgetServerSideProps:GetServerSideProps= ~ res`, res)
 
   return {
@@ -18,9 +19,10 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   }
 }
 
-const List = () => {
+const List: FunctionComponent<IBoardListProps> = ({ res }) => {
   return (
     <DefaultTemplate>
+      {/* <button onClick={() => { httpTest() }}>test</button> */}
       <div css={boardListStyle}>
         <div className="board-list-container">
           <TableContainer>
@@ -35,34 +37,17 @@ const List = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                <Tr>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                </Tr>
-                <Tr>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                </Tr>
-                <Tr>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                </Tr>
-                <Tr>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                </Tr>
+                {
+                  res.map(({ title, date, time, target, createdAt }: any, index: number) => {
+                    return <Tr key={index}>
+                      <Td>{title}</Td>
+                      <Td>{time}</Td>
+                      <Td>{target}</Td>
+                      <Td>{date}</Td>
+                      <Td>{createdAt}</Td>
+                    </Tr>
+                  })
+                }
               </Tbody>
             </Table>
           </TableContainer>

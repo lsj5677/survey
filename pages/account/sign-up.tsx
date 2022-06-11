@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { FormControl, FormLabel, Input, FormErrorMessage, Button, Link, InputRightElement, InputGroup } from '@chakra-ui/react'
-import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -14,7 +14,7 @@ interface IShowPassword {
 }
 interface IFormInputs {
   email: string;
-  password: string | number;
+  password: string;
   confirmPassword: string | number;
   name?: string | number;
 }
@@ -28,17 +28,30 @@ const SignUp = () => {
 
   const onSubmit = async ({ email, password, name }: IFormInputs) => {
     try {
-      const params: IReqUserCreate = { email, password, name };
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      const user = userCredential.user;
+      console.log(`SUJIN:: ~ onSubmit ~ user`, user)
+
+      sendEmailVerification(user)
+        .then(() => {
+          alert("Email verification sent!");
+        });
+
+      const params: IReqUserCreate = { email, password, name, token: await user.getIdToken() };
       const createRes = await httpUserCreate(params)
 
       alert('등록되었습니다.')
 
-      moveBack();
+      // moveBack();
 
     } catch (error) {
+      console.log(`SUJIN:: ~ onSubmit ~ error`, error)
       alert('등록되지 않았습니다.')
     }
   }
+
+
 
 
   return (

@@ -23,3 +23,39 @@ export const httpSurveyCreate = async (params: IReqSurveyGetCreate) => {
     throw error;
   }
 }
+
+export const httpTest = async () => {
+  try {
+    const res = await http(
+      `${hostUrl}/test`,
+      {
+        method: 'GET',
+      }
+    );
+
+    if (res.status === 500) throw 'INTERNAL_SERVER_ERROR';
+
+    return res;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const httpSurveyReadAll = async () => {
+  try {
+    const getListAll = await http(
+      `${hostUrl}/survey/list`,
+      {
+        method: 'GET',
+      }
+    );
+
+    if (getListAll.status === 500) throw 'INTERNAL_SERVER_ERROR';
+
+    return await getListAll.json();
+
+  } catch (error) {
+    throw error;
+  }
+}

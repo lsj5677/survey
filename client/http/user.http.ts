@@ -1,4 +1,3 @@
-import { createUser } from "../../server/services/user.service";
 import { IReqUserCreate } from "../../share/httpType/user.type";
 import { getHostUrl, http } from "../utils/http.util";
 
@@ -6,14 +5,17 @@ const hostUrl = getHostUrl();
 
 export const httpUserCreate = async (params: IReqUserCreate) => {
   try {
-    const { email, password, name } = params;
-    const body = { email, password, name };
+    // const { email, password, name } = params;
+    // const body = { email, password, name };
 
     const createRes = await http(
-      `${hostUrl}/api/user`,
+      `${hostUrl}/auth/sign-up`,
       {
         method: 'POST',
-        body: JSON.stringify(body)
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params)
       }
     );
 
