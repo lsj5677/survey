@@ -2,7 +2,7 @@
 import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
 import { GetServerSideProps, GetServerSidePropsContext } from "next"
 import DefaultTemplate from "../../client/template/default.template"
-import { getUserList } from "../../server/services/user.service"
+import { getSurveyList } from "../../server/services/survey.service"
 import { boardListStyle } from "../../styles/survey-board/list.style"
 
 interface IBoardList {
@@ -10,10 +10,11 @@ interface IBoardList {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-  await getUserList();
+  const res = await getSurveyList();
+  console.log(`SUJIN:: ~ constgetServerSideProps:GetServerSideProps= ~ res`, res)
 
   return {
-    props: {}
+    props: { res }
   }
 }
 

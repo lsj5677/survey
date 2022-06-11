@@ -1,16 +1,15 @@
-import { createUser } from "../../server/services/user.service";
-import { IReqUserCreate } from "../../share/httpType/user.type";
+import { IReqSurveyGetCreate } from "../../share/httpType/survey.type";
 import { getHostUrl, http } from "../utils/http.util";
 
 const hostUrl = getHostUrl();
 
-export const httpUserCreate = async (params: IReqUserCreate) => {
+export const httpSurveyCreate = async (params: IReqSurveyGetCreate) => {
   try {
-    const { email, password, name } = params;
-    const body = { email, password, name };
+    const { title, date, time, target } = params;
+    const body = { title, date, time, target };
 
     const createRes = await http(
-      `${hostUrl}/api/user`,
+      `${hostUrl}/api/survey`,
       {
         method: 'POST',
         body: JSON.stringify(body)

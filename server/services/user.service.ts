@@ -23,23 +23,6 @@ import { getDatabase } from "../utils/database.util";
 //   }
 // }
 
-// export const userCreate = async (params?: any) => {
-//   try {
-//     const { email, password, name } = params;
-//     let query = `INSERT INTO user 
-//                 (email, password, name) 
-//                 VALUES 
-//                 ('${params.email}', '${params.password}', '${params.name}')`;
-//     const [rows,] = await conn.query<any[]>(query);
-//     console.log(`SUJIN:: ~ postCreate ~ rows`, rows)
-
-//     return rows[0];
-
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-
 export const createUser = async (params?: any) => {
   try {
     const { email, password, name } = params;

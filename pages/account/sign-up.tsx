@@ -6,7 +6,6 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { httpUserCreate } from '../../client/http/user.http'
 import DefaultTemplate from '../../client/template/default.template'
-import { createUser } from '../../server/services/user.service'
 import { IReqUserCreate } from '../../share/httpType/user.type'
 import { signUpStyle } from '../../styles/account/sign-up.style'
 interface IShowPassword {
