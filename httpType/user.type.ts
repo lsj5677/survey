@@ -5,3 +5,7 @@ export interface IReqUserCreate {
   name?: string | number;
   token: string;
 }
+
+export interface IReqVerifyToken {
+  token: string;
+}

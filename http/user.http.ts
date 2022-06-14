@@ -1,4 +1,4 @@
-import { IReqUserCreate } from "../../share/httpType/user.type";
+import { IReqUserCreate, IReqVerifyToken } from "../httpType/user.type";
 import { getHostUrl, http } from "../utils/http.util";
 
 const hostUrl = getHostUrl();
@@ -19,9 +19,26 @@ export const httpUserCreate = async (params: IReqUserCreate) => {
       }
     );
 
-    if (createRes.status === 500) throw 'INTERNAL_SERVER_ERROR';
-
     return createRes;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const httpTokenVerify = async (params: IReqVerifyToken) => {
+  try {
+    const userInfo = await http(
+      `${hostUrl}/auth/token-verify`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params)
+      }
+    );
+
+    return await userInfo.json();
   } catch (error) {
     throw error;
   }

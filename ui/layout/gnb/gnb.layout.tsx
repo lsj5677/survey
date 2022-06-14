@@ -1,7 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import Link from "next/link"
 import { useState } from "react"
+import { useRecoilValue } from "recoil"
 import { IMenu } from "../../../types/router.type"
+import { authIsLogin } from "../../../utils/auth.util"
 import { headerStyle } from "./gnb.layout.style"
 
 const GnbLayout = () => {
@@ -21,7 +23,7 @@ const GnbLayout = () => {
     }
   ]
 
-  const [login, setLogin] = useState<boolean>(false);
+  const isLogin = useRecoilValue(authIsLogin);
 
   return (
     <header css={headerStyle}>
@@ -40,10 +42,10 @@ const GnbLayout = () => {
         </nav>
         <div className="nav-items">
           {
-            !login ?
+            !isLogin ?
               <div>
                 <Link href="/account/sign-up">Sign Up</Link>
-                <Link href="/login">Login</Link>
+                <Link href="/account/sign-in">Login</Link>
               </div>
               :
               <div>

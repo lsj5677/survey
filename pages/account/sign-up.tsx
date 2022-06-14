@@ -4,15 +4,16 @@ import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { httpUserCreate } from '../../client/http/user.http'
-import DefaultTemplate from '../../client/template/default.template'
-import { IReqUserCreate } from '../../share/httpType/user.type'
+import { httpUserCreate } from '../../http/user.http'
+import DefaultTemplate from '../../template/default.template'
+import { IReqUserCreate } from '../../httpType/user.type'
 import { signUpStyle } from '../../styles/account/sign-up.style'
+import { EAUTH_ERROR } from '../../types/error.type';
 interface IShowPassword {
   password: boolean;
   confirmPassword: boolean;
 }
-interface IFormInputs {
+interface ISignUpInputs {
   email: string;
   password: string;
   confirmPassword: string | number;
@@ -21,33 +22,37 @@ interface IFormInputs {
 
 const SignUp = () => {
 
-  const { register, handleSubmit, getValues, trigger, formState: { errors, isSubmitting, dirtyFields } } = useForm<IFormInputs>();
+  const { register, handleSubmit, getValues, trigger, formState: { errors, isSubmitting, dirtyFields } } = useForm<ISignUpInputs>();
   const router = useRouter();
   const moveBack = () => router.push('/');
   const [showPassword, setShowPassword] = useState<IShowPassword>({ password: false, confirmPassword: false });
 
-  const onSubmit = async ({ email, password, name }: IFormInputs) => {
+  const onSubmit = async ({ email, password, name }: ISignUpInputs) => {
     try {
       const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
       const user = userCredential.user;
       console.log(`SUJIN:: ~ onSubmit ~ user`, user)
 
-      sendEmailVerification(user)
-        .then(() => {
-          alert("Email verification sent!");
-        });
+      // sendEmailVerification(user)
+      //   .then(() => {
+      //     alert("Email verification sent!");
+      //   });
 
-      const params: IReqUserCreate = { email, password, name, token: await user.getIdToken() };
-      const createRes = await httpUserCreate(params)
+      // const params: IReqUserCreate = { email, password, name, token: await user.getIdToken() };
+      // const createRes = await httpUserCreate(params)
 
-      alert('등록되었습니다.')
+      // alert('등록되었습니다.')
 
       // moveBack();
 
-    } catch (error) {
-      console.log(`SUJIN:: ~ onSubmit ~ error`, error)
-      alert('등록되지 않았습니다.')
+    } catch (error: any) {
+      console.log(`SUJIN:: ~ onSubmit ~ error`, JSON.stringify(error))
+      if (error.code === EAUTH_ERROR.ALREADY_USER) {
+        alert('이미 등록된 이메일 입니다.')
+      } else {
+        alert('등록되지 않았습니다.')
+      }
     }
   }
 

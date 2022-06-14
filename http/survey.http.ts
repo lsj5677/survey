@@ -1,4 +1,4 @@
-import { IReqSurveyGetCreate } from "../../share/httpType/survey.type";
+import { IReqSurveyGetCreate } from "../httpType/survey.type";
 import { getHostUrl, http } from "../utils/http.util";
 
 const hostUrl = getHostUrl();

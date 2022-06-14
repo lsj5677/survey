@@ -10,7 +10,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  // const analytics = getAnalytics(app);
+  let analytics;
+
+  if (app.name && typeof window !== 'undefined') {
+    analytics = getAnalytics(app);
+  }
 
 
   return (

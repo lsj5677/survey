@@ -2,8 +2,8 @@
 import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
 import { GetServerSideProps, GetServerSidePropsContext } from "next"
 import { FunctionComponent } from "react"
-import { httpSurveyReadAll, httpTest } from "../../client/http/survey.http"
-import DefaultTemplate from "../../client/template/default.template"
+import { httpSurveyReadAll, httpTest } from "../../http/survey.http"
+import DefaultTemplate from "../../template/default.template"
 import { boardListStyle } from "../../styles/survey-board/list.style"
 
 interface IBoardListProps {
