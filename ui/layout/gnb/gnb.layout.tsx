@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import Link from "next/link"
-import { useState } from "react"
 import { useRecoilValue } from "recoil"
+import { authIsLogin } from "../../../selectors/auth.selector"
 import { IMenu } from "../../../types/router.type"
-import { authIsLogin } from "../../../utils/auth.util"
 import { headerStyle } from "./gnb.layout.style"
+import { getAuth } from "firebase/auth";
 
 const GnbLayout = () => {
 
@@ -23,6 +23,7 @@ const GnbLayout = () => {
     }
   ]
 
+  const auth = getAuth();
   const isLogin = useRecoilValue(authIsLogin);
 
   return (
@@ -50,7 +51,7 @@ const GnbLayout = () => {
               :
               <div>
                 <Link href="/mypage">My page</Link>
-                <Link href="/logout">Logout</Link>
+                <button onClick={() => auth.signOut()}>Logout</button>
               </div>
           }
         </div>

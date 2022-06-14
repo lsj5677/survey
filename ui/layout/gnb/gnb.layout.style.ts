@@ -16,5 +16,14 @@ export const headerStyle = css`
     a + a {
       margin-left: 2.5em;
     }
+
+    button {
+      all: unset;
+      color: var(--mainColor);
+      text-transform: uppercase;
+      font-weight: var(--boldText);
+      margin-left: 2.5em;
+      cursor: pointer;
+    }
   }
 `;

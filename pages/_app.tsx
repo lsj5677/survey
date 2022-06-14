@@ -3,8 +3,10 @@ import { getAnalytics } from "firebase/analytics";
 import '../styles/globals.scss'
 import type { AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
-import { RecoilRoot } from 'recoil'
+import { RecoilRoot, useRecoilState } from 'recoil'
 import { firebaseConfig } from "../config/firebase.config";
+import { userInfoState } from "../atoms/auth.atom";
+import { authInit } from "../utils/auth.util";
 
 function MyApp({ Component, pageProps }: AppProps) {
 

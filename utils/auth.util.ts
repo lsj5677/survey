@@ -1,17 +1,13 @@
-import { selector, useRecoilValue } from "recoil"
-import { userInfoState } from "../atoms/userInfo.atom"
+import { httpTokenVerify } from "../http/user.http";
+import { IReqVerifyToken } from "../httpType/user.type";
+import { EAUTH_ERROR } from "../types/error.type";
 
-// export const isLogin = () => {
-//   // 이메일 여부에 따라 리턴
-//   const userInfo = useRecoilValue(userInfoState)
-//   console.log(`SUJIN:: ~ isLogin ~ userInfo`, userInfo)
-// }
+export const authInit = async (firebaseUser: any) => {
 
-export const authIsLogin = selector({
-  key: 'auth/isLogin',
-  get: ({ get }) => {
-    const userInfo = get(userInfoState);
+  if (!firebaseUser) throw EAUTH_ERROR.EMPTY_USER;
+  const token = await firebaseUser.getIdToken();
+  const param: IReqVerifyToken = { token: await firebaseUser.getIdToken() }
+  const userInfoRes = await httpTokenVerify(param);
 
-    return !!userInfo?.email;
-  }
-})
+  return userInfoRes;
+}

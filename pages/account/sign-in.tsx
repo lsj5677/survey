@@ -7,9 +7,9 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { httpTokenVerify } from "../../http/user.http";
 import { IReqVerifyToken } from "../../httpType/user.type";
 import { EAUTH_ERROR } from "../../types/error.type";
-import { authIsLogin } from "../../utils/auth.util";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { userInfoState } from "../../atoms/userInfo.atom";
+import { userInfoState } from "../../atoms/auth.atom";
+import { authIsLogin } from "../../selectors/auth.selector";
 
 interface ISignInInputs {
   email: string;
