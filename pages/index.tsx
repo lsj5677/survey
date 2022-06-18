@@ -11,6 +11,7 @@ import DefaultTemplate from '../template/default.template'
 const Home: NextPage = () => {
   return (
     <DefaultTemplate>
+      index
       {/* <Head></Head> 
       <GnbLayout />
       <MainLayout>

@@ -1,5 +1,6 @@
 import { IReqUserCreate, IReqVerifyToken } from "../httpType/user.type";
 import { getHostUrl, http } from "../utils/http.util";
+import axios from 'axios';
 
 const hostUrl = getHostUrl();
 
@@ -24,6 +25,7 @@ export const httpUserCreate = async (params: IReqUserCreate) => {
     throw error;
   }
 }
+
 
 export const httpTokenVerify = async (params: IReqVerifyToken) => {
   try {

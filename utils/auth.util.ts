@@ -8,6 +8,7 @@ export const authInit = async (firebaseUser: any) => {
   const token = await firebaseUser.getIdToken();
   const param: IReqVerifyToken = { token: await firebaseUser.getIdToken() }
   const userInfoRes = await httpTokenVerify(param);
+  console.log(`SUJIN:: ~ authInit ~ userInfoRes`, userInfoRes)
 
   return userInfoRes;
 }

@@ -1,25 +1,39 @@
 /** @jsxImportSource @emotion/react */
 import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
 import { GetServerSideProps, GetServerSidePropsContext } from "next"
-import { FunctionComponent } from "react"
+import { FunctionComponent, useEffect, useState } from "react"
 import { httpSurveyReadAll, httpTest } from "../../http/survey.http"
 import DefaultTemplate from "../../template/default.template"
 import { boardListStyle } from "../../styles/survey-board/list.style"
 
 interface IBoardListProps {
-  res: any
+  // res: any
 }
 
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-  const res = await httpSurveyReadAll();
-  console.log(`SUJIN:: ~ constgetServerSideProps:GetServerSideProps= ~ res`, res)
+// export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+//   const res = await httpSurveyReadAll();
+//   console.log(`SUJIN:: ~ constgetServerSideProps:GetServerSideProps= ~ res`, res)
 
-  return {
-    props: { res }
-  }
-}
+//   return {
+//     props: { res }
+//   }
+// }
 
-const List: FunctionComponent<IBoardListProps> = ({ res }) => {
+
+const List: FunctionComponent<IBoardListProps> = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const resData = await httpSurveyReadAll();
+      setData(resData);
+    }
+
+    getData();
+  }, [])
+
+
+
   return (
     <DefaultTemplate>
       {/* <button onClick={() => { httpTest() }}>test</button> */}
@@ -38,7 +52,7 @@ const List: FunctionComponent<IBoardListProps> = ({ res }) => {
               </Thead>
               <Tbody>
                 {
-                  res.map(({ title, date, time, target, createdAt }: any, index: number) => {
+                  data.map(({ title, date, time, target, createdAt }: any, index: number) => {
                     return <Tr key={index}>
                       <Td>{title}</Td>
                       <Td>{time}</Td>

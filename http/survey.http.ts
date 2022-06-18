@@ -1,5 +1,6 @@
 import { IReqSurveyGetCreate } from "../httpType/survey.type";
 import { getHostUrl, http } from "../utils/http.util";
+import axios from 'axios';
 
 const hostUrl = getHostUrl();
 
@@ -24,6 +25,7 @@ export const httpSurveyCreate = async (params: IReqSurveyGetCreate) => {
   }
 }
 
+
 export const httpTest = async () => {
   try {
     const res = await http(
@@ -44,16 +46,23 @@ export const httpTest = async () => {
 
 export const httpSurveyReadAll = async () => {
   try {
-    const getListAll = await http(
-      `${hostUrl}/survey/list`,
-      {
-        method: 'GET',
-      }
-    );
+    // promise 편하게 사용 : async, await
+    // await -> then 필요 없음 await 수행까지 기다리고 결과 리턴
+    // 결과값 res(변수)에 저장
+    const res = await axios.get(`${hostUrl}/survey/list`);
+    // if (res.status === 500) throw 'INTERNAL_SERVER_ERROR';
+    return res.data;
 
-    if (getListAll.status === 500) throw 'INTERNAL_SERVER_ERROR';
+    // const getListAll = await http(
+    //   `${hostUrl}/survey/list`,
+    //   {
+    //     method: 'GET',
+    //   }
+    // );
 
-    return await getListAll.json();
+    // if (getListAll.status === 500) throw 'INTERNAL_SERVER_ERROR';
+
+    // return await getListAll.json();
 
   } catch (error) {
     throw error;

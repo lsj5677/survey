@@ -9,6 +9,8 @@ import DefaultTemplate from '../../template/default.template'
 import { IReqUserCreate } from '../../httpType/user.type'
 import { signUpStyle } from '../../styles/account/sign-up.style'
 import { EAUTH_ERROR } from '../../types/error.type';
+import { useRecoilState } from 'recoil';
+import { tempUserState } from '../../atoms/tempUser.atom';
 interface IShowPassword {
   password: boolean;
   confirmPassword: boolean;
@@ -24,8 +26,9 @@ const SignUp = () => {
 
   const { register, handleSubmit, getValues, trigger, formState: { errors, isSubmitting, dirtyFields } } = useForm<ISignUpInputs>();
   const router = useRouter();
-  const moveBack = () => router.push('/');
+  const redirect = () => router.push('/account/email-sended');
   const [showPassword, setShowPassword] = useState<IShowPassword>({ password: false, confirmPassword: false });
+  const [tempUser, setTempUser] = useRecoilState(tempUserState);
 
   const onSubmit = async ({ email, password, name }: ISignUpInputs) => {
     try {
@@ -34,22 +37,23 @@ const SignUp = () => {
       const user = userCredential.user;
       console.log(`SUJIN:: ~ onSubmit ~ user`, user)
 
-      // sendEmailVerification(user)
-      //   .then(() => {
-      //     alert("Email verification sent!");
-      //   });
+      sendEmailVerification(user)
+        .then(() => {
+          // alert("Email verification sent!");
+        });
 
-      // const params: IReqUserCreate = { email, password, name, token: await user.getIdToken() };
-      // const createRes = await httpUserCreate(params)
+      const params: IReqUserCreate = { email, password, name, token: await user.getIdToken() };
+      const createRes = await httpUserCreate(params)
 
-      // alert('등록되었습니다.')
-
-      // moveBack();
+      setTempUser({ email });
+      redirect();
 
     } catch (error: any) {
       console.log(`SUJIN:: ~ onSubmit ~ error`, JSON.stringify(error))
       if (error.code === EAUTH_ERROR.ALREADY_USER) {
         alert('이미 등록된 이메일 입니다.')
+      } else if (error.code === EAUTH_ERROR.INVALID_EMAIL) {
+        alert('유효하지 않은 이메일 입니다.')
       } else {
         alert('등록되지 않았습니다.')
       }
