@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { IUserInfo, userInfoState } from '../atoms/auth.atom';
 import FooterLayout from '../ui/layout/footer/footer.layout';
@@ -56,13 +56,15 @@ const DefaultTemplate = (props: any) => {
 
   // appInit이 다 끝나고 실행되도록 suspense로 감싸기
   return (
-    <div css={wrapperStyle}>
-      <GnbLayout />
-      <MainLayout>
-        {props.children}
-      </MainLayout>
-      <FooterLayout />
-    </div>
+    <Suspense fallback={<div>...page Loading</div>}>
+      <div css={wrapperStyle}>
+        <GnbLayout />
+        <MainLayout>
+          {props.children}
+        </MainLayout>
+        <FooterLayout />
+      </div>
+    </Suspense>
   )
 }
 

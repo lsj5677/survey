@@ -1,25 +1,23 @@
+/** @jsxImportSource @emotion/react */
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import MainLayout from '../ui/layout/main/main.layout'
-import FooterLayout from '../ui/layout/footer/footer.layout'
-import GnbLayout from '../ui/layout/gnb/gnb.layout'
-import { authInit } from '../utils/auth.util'
-import { useRecoilState } from 'recoil'
-import { userInfoState } from '../atoms/auth.atom'
 import DefaultTemplate from '../template/default.template'
+import { mainSectionStyle } from '../styles/index.style'
 
 const Home: NextPage = () => {
   return (
-    <DefaultTemplate>
-      index
-      {/* <Head></Head> 
-      <GnbLayout />
-      <MainLayout>
-        main
-      </MainLayout>
-      <FooterLayout />
-      */}
-    </DefaultTemplate>
+    <>
+      {/* use head and add meta tag in head component  */}
+      <Head>
+        <title>SURVeY</title>
+        {/* font적용 */}
+      </Head>
+      <DefaultTemplate>
+        <section css={mainSectionStyle}>
+          This is Main :)
+        </section>
+      </DefaultTemplate>
+    </>
   )
 }
 

@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 export const signUpStyle = css`
   .sign-up-container {
-    max-width: 1200px;
+    max-width: var(--survey-content-max-width);
     margin: 0 auto;
     padding: 3em 0;
 
@@ -12,14 +12,7 @@ export const signUpStyle = css`
     box-shadow: 0px 4px 15px rgba(162, 162, 162, 0.25);
     border-radius: 20px;
     padding: 5em 1em;
-
-      h1 {
-        text-align: center;
-        font-size: 1.6em;
-        font-weight: 300;
-        color: #D9D9D9;
-      }
-
+    
       form {
         max-width: 400px;
         margin: 2em auto 0;
@@ -32,10 +25,11 @@ export const signUpStyle = css`
         input {
           padding: 0.8em 1em;
           border-radius: 15px;
+          border-color: var(--survey-colors-gray-200);
           height: auto;
 
           &::placeholder {
-            color: #A0AEC0;
+            color: var(--survey-colors-gray-300);
             font-weight: 400;
           }
 
@@ -48,7 +42,7 @@ export const signUpStyle = css`
         button.submit {
           padding: 2em 0;
           border-radius: 15px;
-          background-color: var(--mainColor);
+          background-color: var(--survey-colors-blue-500);
           color: #fff;
           text-transform: uppercase;
           font-size: 0.8em;
@@ -56,15 +50,15 @@ export const signUpStyle = css`
       }
 
       .sign-in-notice {
-        max-width: 400px;
-        margin: 1em auto 0;
+        margin: 1.5em auto 0;
         text-align: center;
-        color: #A0AEC0;
+        color: var(--survey-colors-gray-300);
+        font-size: 0.8em;
 
         a {
           display: inline-block;
           margin-left: 0.5em;
-          color: var(--mainColor);
+          color: var(--survey-colors-blue-500);
           font-weight: 600;
         }
       }

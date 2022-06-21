@@ -68,7 +68,7 @@ const SignUp = () => {
       <div css={signUpStyle}>
         <div className="sign-up-container">
           <div className="sign-up-items">
-            <h1>Survey Logo</h1>
+            <h1 className="logo">SURV<span>e</span>Y</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl isRequired isInvalid={dirtyFields.email && !!errors?.email}>
                 <FormLabel htmlFor='email'>Email</FormLabel>

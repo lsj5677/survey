@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 export const signInStyle = css`
   .sign-in-container {
-    max-width: 1200px;
+    max-width: var(--survey-content-max-width);
     margin: 0 auto;
     padding: 3em 0;
 
@@ -13,12 +13,6 @@ export const signInStyle = css`
       border-radius: 20px;
       padding: 5em 1em;
 
-      h1 {
-        text-align: center;
-        font-size: 1.6em;
-        font-weight: 300;
-        color: #D9D9D9;
-      }
 
       form {
         max-width: 400px;
@@ -33,9 +27,10 @@ export const signInStyle = css`
           padding: 0.8em 1em;
           border-radius: 15px;
           height: auto;
+          border-color: var(--survey-colors-gray-200);
 
           &::placeholder {
-            color: #A0AEC0;
+            color: var(--survey-colors-gray-300);
             font-weight: 400;
           }
 
@@ -48,7 +43,7 @@ export const signInStyle = css`
         button.submit {
           padding: 2em 0;
           border-radius: 15px;
-          background-color: var(--mainColor);
+          background-color: var(--survey-colors-blue-500);
           color: #fff;
           text-transform: uppercase;
           font-size: 0.8em;
@@ -73,7 +68,7 @@ export const signInStyle = css`
         }
 
         .move-page {
-          color: #A0AEC0;
+          color: var(--survey-colors-gray-300);
           text-align: center;
           padding-top: 1.2em;
           font-size: 0.8em;
@@ -84,7 +79,7 @@ export const signInStyle = css`
           }
 
           a {
-            color: var(--mainColor);
+            color: var(--survey-colors-blue-500);
             display: inline-block;
             margin-left: 0.5em;
             font-weight: 600;

@@ -30,7 +30,7 @@ const GnbLayout = () => {
     <header css={headerStyle}>
       <div className="header-container">
         <div className="nav-logo">
-          <Link href="/">Survey Logo</Link>
+          <a href="/">SURV<span>e</span>Y</a>
         </div>
         <nav className="nav-items nav-menu">
           {
