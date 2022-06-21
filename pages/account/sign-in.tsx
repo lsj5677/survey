@@ -10,6 +10,7 @@ import { EAUTH_ERROR } from "../../types/error.type";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfoState } from "../../atoms/auth.atom";
 import { authIsLogin } from "../../selectors/auth.selector";
+import { httpLogin } from "../../http/auth.http";
 
 interface ISignInInputs {
   email: string;
@@ -42,7 +43,10 @@ const SignIn = () => {
       const token = await currentUser.getIdToken();
       const param: IReqVerifyToken = { token: await currentUser.getIdToken() }
       const userInfoRes = await httpTokenVerify(param);
+
       setUserInfo(userInfoRes);
+
+      const authLogin = await httpLogin({ ...userInfoRes, token: await currentUser.getIdToken() });
 
       console.log(`SUJIN:: ~ onSubmit ~ userInfo`, userInfo)
 

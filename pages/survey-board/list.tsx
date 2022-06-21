@@ -5,9 +5,13 @@ import { FunctionComponent, useEffect, useState } from "react"
 import { httpSurveyReadAll, httpTest } from "../../http/survey.http"
 import DefaultTemplate from "../../template/default.template"
 import { boardListStyle } from "../../styles/survey-board/list.style"
+import { withIronSessionSsr } from "iron-session/next/dist"
+import { withSessionSsr } from "../../utils/session.util"
+import axios from "axios"
 
 interface IBoardListProps {
-  // res: any
+  user: any,
+  surveyList: any
 }
 
 // export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
@@ -19,24 +23,46 @@ interface IBoardListProps {
 //   }
 // }
 
+export const getServerSideProps = withSessionSsr(
+  async function getServerSideProps({ req }) {
 
-const List: FunctionComponent<IBoardListProps> = () => {
-  const [data, setData] = useState([]);
+    const user = req.session.user;
+    // const surveyList = await httpSurveyReadAll();
+    let Authorization: string = user?.token ? `Bearer ${user.token}` : '';
 
-  useEffect(() => {
-    const getData = async () => {
-      const resData = await httpSurveyReadAll();
-      setData(resData);
-    }
+    const surveyList = await axios.get(`http://localhost:3000/survey/list`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization
+      },
+    })
 
-    getData();
-  }, [])
+    return {
+      props: {
+        user: req.session.user,
+        surveyList,
+      },
+    };
+  },
+);
+
+const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
+  const [list, setList] = useState(surveyList);
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const resData = await httpSurveyReadAll();
+  //     setData(resData);
+  //   }
+
+  //   getData();
+  // }, [])
 
 
 
   return (
-    <DefaultTemplate>
-      {/* <button onClick={() => { httpTest() }}>test</button> */}
+    <DefaultTemplate user={user}>
+      <button onClick={() => { httpTest() }}>test-button</button>
       <div css={boardListStyle}>
         <div className="board-list-container">
           <TableContainer>
@@ -52,7 +78,7 @@ const List: FunctionComponent<IBoardListProps> = () => {
               </Thead>
               <Tbody>
                 {
-                  data.map(({ title, date, time, target, createdAt }: any, index: number) => {
+                  list.map(({ title, date, time, target, createdAt }: any, index: number) => {
                     return <Tr key={index}>
                       <Td>{title}</Td>
                       <Td>{time}</Td>

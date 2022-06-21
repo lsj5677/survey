@@ -13,7 +13,6 @@ import axios, { AxiosRequestConfig } from 'axios';
 const DefaultTemplate = (props: any) => {
 
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-  console.log('test')
 
   const appInit = () => {
     const auth = getAuth();
@@ -35,16 +34,16 @@ const DefaultTemplate = (props: any) => {
       const token = await firebaseUser.getIdToken();
       let Authorization: string = token ? `Bearer ${token}` : '';
 
-      axiosInterceptorConfig(Authorization);
+      // axiosInterceptorConfig(Authorization);
     })
   }
 
-  const axiosInterceptorConfig = (auth: string) => {
-    axios.interceptors.request.use((config: AxiosRequestConfig<any>) => {
-      config.headers = { ...config.headers, Authorization: auth }
-      return config
-    })
-  }
+  // const axiosInterceptorConfig = (auth: string) => {
+  //   axios.interceptors.request.use((config: AxiosRequestConfig<any>) => {
+  //     config.headers = { ...config.headers, Authorization: auth }
+  //     return config
+  //   })
+  // }
 
   // nextjs Auth : iron session : session 관리 | next auth : token으로 
   // next / nest 로 분리해서 사용 x
@@ -56,15 +55,13 @@ const DefaultTemplate = (props: any) => {
 
   // appInit이 다 끝나고 실행되도록 suspense로 감싸기
   return (
-    <Suspense fallback={<div>...page Loading</div>}>
-      <div css={wrapperStyle}>
-        <GnbLayout />
-        <MainLayout>
-          {props.children}
-        </MainLayout>
-        <FooterLayout />
-      </div>
-    </Suspense>
+    <div css={wrapperStyle}>
+      <GnbLayout />
+      <MainLayout>
+        {props.children}
+      </MainLayout>
+      <FooterLayout />
+    </div>
   )
 }
 

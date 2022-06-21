@@ -1,5 +1,5 @@
 import { IReqUserCreate, IReqVerifyToken } from "../httpType/user.type";
-import { getHostUrl, http } from "../utils/http.util";
+import { getHostUrl } from "../utils/http.util";
 import axios from 'axios';
 
 const hostUrl = getHostUrl();
@@ -25,8 +25,8 @@ const hostUrl = getHostUrl();
 
 export const httpUserCreate = async (params: IReqUserCreate) => {
   try {
-    const payload = JSON.stringify(params);
-    const res = await axios.post(`${hostUrl}/auth/sign-up`, payload, {
+    // const payload = JSON.stringify(params);
+    const res = await axios.post(`${hostUrl}/auth/sign-up`, params, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -40,29 +40,10 @@ export const httpUserCreate = async (params: IReqUserCreate) => {
 }
 
 
-// export const httpTokenVerify = async (params: IReqVerifyToken) => {
-//   try {
-//     const userInfo = await http(
-//       `${hostUrl}/auth/token-verify`,
-//       {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(params)
-//       }
-//     );
-
-//     return await userInfo.json();
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-
 export const httpTokenVerify = async (params: IReqVerifyToken) => {
   try {
-    const payload = JSON.stringify(params);
-    const res = await axios.post(`${hostUrl}/auth/token-verify`, payload, {
+    // const payload = JSON.stringify(params);
+    const res = await axios.post(`${hostUrl}/auth/token-verify`, params, {
       headers: {
         'Content-Type': 'application/json',
       },

@@ -26,22 +26,33 @@ export const httpSurveyCreate = async (params: IReqSurveyGetCreate) => {
 }
 
 
+// export const httpTest = async () => {
+//   try {
+//     const res = await http(
+//       `localhost:8080/api/session`,
+//       {
+//         method: 'GET',
+//       }
+//     );
+
+//     if (res.status === 500) throw 'INTERNAL_SERVER_ERROR';
+
+//     return res;
+
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
 export const httpTest = async () => {
   try {
-    const res = await http(
-      `${hostUrl}/test`,
-      {
-        method: 'GET',
-      }
-    );
-
-    if (res.status === 500) throw 'INTERNAL_SERVER_ERROR';
-
-    return res;
+    const res = await axios.get(`http://localhost:8080/api/session`);
+    return res.data;
 
   } catch (error) {
     throw error;
   }
+
 }
 
 // export const httpSurveyReadAll = async () => {

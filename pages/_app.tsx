@@ -5,6 +5,14 @@ import type { AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
 import { RecoilRoot, useRecoilState } from 'recoil'
 import { firebaseConfig } from "../config/firebase.config";
+import { IIronSessionUser } from "../types/auth.type";
+
+// type 확장
+declare module 'iron-session' {
+  interface IronSessionData {
+    user?: IIronSessionUser;
+  }
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
 
