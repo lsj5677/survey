@@ -12,14 +12,14 @@ import { EAUTH_ERROR } from '../../types/error.type';
 import { useRecoilState } from 'recoil';
 import { tempUserState } from '../../atoms/tempUser.atom';
 interface IShowPassword {
-  password: boolean;
-  confirmPassword: boolean;
+  password: boolean,
+  confirmPassword: boolean,
 }
 interface ISignUpInputs {
-  email: string;
-  password: string;
-  confirmPassword: string | number;
-  name?: string | number;
+  email: string,
+  password: string,
+  confirmPassword: string | number,
+  name?: string | number,
 }
 
 const SignUp = () => {

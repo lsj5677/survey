@@ -50,7 +50,7 @@ const GnbLayout = () => {
               </div>
               :
               <div>
-                <Link href="/mypage">My page</Link>
+                <Link href="/account/my-page">My page</Link>
                 <button onClick={() => auth.signOut()}>Logout</button>
               </div>
           }

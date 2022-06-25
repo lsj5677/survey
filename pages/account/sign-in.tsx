@@ -13,8 +13,8 @@ import { authIsLogin } from "../../selectors/auth.selector";
 import { httpLogin } from "../../http/auth.http";
 
 interface ISignInInputs {
-  email: string;
-  password: string;
+  email: string,
+  password: string,
 }
 
 const SignIn = () => {
