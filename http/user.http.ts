@@ -32,6 +32,8 @@ export const httpUserCreate = async (params: IReqUserCreate) => {
       },
     })
 
+    // const res = await httpPost('auth/sign-up', params)
+
     return res.data;
 
   } catch (error) {
@@ -48,6 +50,8 @@ export const httpTokenVerify = async (params: IReqVerifyToken) => {
         'Content-Type': 'application/json',
       },
     })
+
+    // const res = await httpPost('auth/token-verify', params)
 
     return res.data;
   } catch (error) {

@@ -14,13 +14,14 @@ const Detail = () => {
             <span>2022-06-25</span>
           </div>
           <div className="detail-body">
-            <span>End date : 2022-07-03</span>
+            <span className="end-date">End date : 2022-07-03</span>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
               Voluptates maiores neque earum alias excepturi unde fugit odit sequi iste error culpa,
               facilis molestias nihil. Quibusdam odit maiores eaque hic similique in distinctio animi
               quas officia consequuntur quae expedita ducimus, vel sapiente ipsam ad modi velit dolor quo
               facilis asperiores placeat!
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptate hic at omnis tempora libero. Perferendis tenetur molestias, sit eum laborum assumenda non sapiente magni vero quam consectetur placeat adipisci omnis dolorum architecto aliquam obcaecati explicabo aut, in, molestiae ratione ipsum. Beatae cumque architecto hic sit quasi ipsam ipsa, accusantium quibusdam tenetur nemo consequatur eveniet tempora ut odio deserunt voluptas at natus laborum magnam veritatis aut, minus perspiciatis, quia officiis! Hic molestiae nostrum amet quis doloremque ex dolor animi quibusdam. Nesciunt!
             </p>
             <Link href={'/'}>
               <div className="link-box">
@@ -36,7 +37,7 @@ const Detail = () => {
               <Tag variant='solid'>tag3</Tag>
             </HStack>
           </div>
-          <Link href={'/'}>List</Link>
+          <Link href={'/survey-board/list'}>Go back</Link>
         </div>
       </div>
     </DefaultTemplate>

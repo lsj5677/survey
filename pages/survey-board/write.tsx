@@ -3,7 +3,6 @@ import { FormControl, FormLabel, RadioGroup, HStack, Radio, FormHelperText, Inpu
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import DefaultTemplate from "../../template/default.template";
 import { boardWriteStyle } from "../../styles/survey-board/write.style";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
@@ -18,15 +17,14 @@ interface IWriteInputs {
   description?: string
 }
 
-const Write = () => {
+const Write = (props: any) => {
   const { register, handleSubmit, getValues, trigger, formState: { errors, isSubmitting, dirtyFields } } = useForm<IWriteInputs>();
   const router = useRouter();
-  const redirect = () => router.push('/');
 
   const onSubmit = async ({ title, time, target, endDate, tag, link, description }: IWriteInputs) => {
     try {
       alert('등록되었습니다')
-      redirect();
+
 
     } catch (error: any) {
       console.log(`SUJIN:: ~ onSubmit ~ error`, JSON.stringify(error))
@@ -84,8 +82,8 @@ const Write = () => {
           />
         </FormControl>
         <ButtonGroup gap={4} className='button-group'>
-          {/* <Button>Cancel</Button> */}
-          <Button type='submit' colorScheme='blue'>Save</Button>
+          <Button onClick={props.onClose}>Cancel</Button>
+          <Button className="submit" type='submit' colorScheme='blue'>Save</Button>
         </ButtonGroup>
       </form>
     </div>

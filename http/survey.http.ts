@@ -1,5 +1,5 @@
 import { IReqSurveyGetCreate } from "../httpType/survey.type";
-import { getHostUrl, http } from "../utils/http.util";
+import { getHostUrl, http, httpGet } from "../utils/http.util";
 import axios from 'axios';
 
 const hostUrl = getHostUrl();
@@ -74,13 +74,23 @@ export const httpTest = async () => {
 //   }
 // }
 
-export const httpSurveyReadAll = async () => {
+export const httpSurveyReadAll = async (user: any) => {
   try {
     // promise 편하게 사용 : async, await
     // await -> then 필요 없음 await 수행까지 기다리고 결과 리턴
     // 결과값 res(변수)에 저장
-    const res = await axios.get(`${hostUrl}/survey/list`);
+
+    // const res = await axios.get(`${hostUrl}/survey/list`,
+    //   {
+    //     headers: {
+    //       Authorization: user?.accessToken ? `Bearer ${user?.accessToken}` : ''
+    //     }
+    //   }
+    // );h
+
+    const res = await httpGet(`survey/list`, user);
     return res.data;
+
   } catch (error) {
     throw error;
   }

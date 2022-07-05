@@ -1,9 +1,13 @@
+import { async } from "@firebase/util";
+import axios, { AxiosRequestConfig } from "axios";
 import { withIronSessionApiRoute, withIronSessionSsr } from "iron-session/next";
 import {
+  GetServerSideProps,
   GetServerSidePropsContext,
   GetServerSidePropsResult,
   NextApiHandler,
 } from "next";
+import { getServerSideProps } from "../pages/survey-board/list";
 
 const sessionOptions = {
   cookieName: "survey_user",
@@ -34,9 +38,25 @@ export function withSessionRoute(handler: NextApiHandler) {
 export function withSessionSsr<
   P extends { [key: string]: unknown } = { [key: string]: unknown },
   >(
-    handler: (
-      context: GetServerSidePropsContext,
-    ) => GetServerSidePropsResult<P> | Promise<GetServerSidePropsResult<P>>,
-) {
-  return withIronSessionSsr(handler, sessionOptions);
+    getServerSideProps: GetServerSideProps
+  ) {
+  return withIronSessionSsr(withAuth(getServerSideProps), sessionOptions);
+}
+
+export const withAuth = (getServerSideProps: GetServerSideProps) => {
+
+  return async (context: GetServerSidePropsContext) => {
+    // const token = context?.req?.session?.user?.accessToken;
+    // let Authorization: string = token ? `Bearer ${token}` : '';
+    // axios.interceptors.request.use(
+    //   (config: AxiosRequestConfig<any>) => {
+    //     config.headers = { ...config.headers, Authorization }
+    //     return config
+    //   },
+    //   (error) => {
+    //     return Promise.reject(error)
+    //   }
+    // )
+    return await getServerSideProps(context);
+  }
 }

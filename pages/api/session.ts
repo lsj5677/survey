@@ -9,15 +9,24 @@ export default withIronSessionApiRoute(
   // 사용자정보 클라이언트, 서버 동시에 가지고 있어야 함 
   async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
     const { query, body, method } = req;
-    console.log(`SUJIN:: ~ loginRoute ~ body`, body)
+    const { userInfo, accessToken, refreshToken } = body;
 
     switch (method) {
       case 'POST':
-        req.session.user = body
+        req.session.destroy();
+        // 사용자등록
+        req.session.user = { ...userInfo, accessToken, refreshToken };
         await req.session.save();
-        res.send({ ok: true });
+        // 응답
+        res.json({ user: req.session.user });
 
         break;
+
+      case 'DELETE':
+        await req.session.destroy();
+        res.json({ msg: 'done' })
+
+        break
 
       default:
         res.setHeader('Allow', ['GET', 'POST']);

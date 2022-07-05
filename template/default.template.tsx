@@ -9,6 +9,7 @@ import MainLayout from '../ui/layout/main/main.layout';
 import { authInit } from '../utils/auth.util';
 import { getAuth } from "firebase/auth";
 import axios, { AxiosRequestConfig } from 'axios';
+import { httpSessionClear } from '../http/auth.http';
 
 const DefaultTemplate = (props: any) => {
 
@@ -23,6 +24,8 @@ const DefaultTemplate = (props: any) => {
 
       if (!firebaseUser) {
         setUserInfo({} as IUserInfo);
+        await httpSessionClear();
+
         return false;
       }
 

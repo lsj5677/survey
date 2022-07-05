@@ -10,7 +10,7 @@ import { EAUTH_ERROR } from "../../types/error.type";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfoState } from "../../atoms/auth.atom";
 import { authIsLogin } from "../../selectors/auth.selector";
-import { httpLogin } from "../../http/auth.http";
+import { httpLogin, httpSessionRegist } from "../../http/auth.http";
 
 interface ISignInInputs {
   email: string,
@@ -40,13 +40,18 @@ const SignIn = () => {
 
       // token -> server 보내기
       if (!currentUser) throw EAUTH_ERROR.EMPTY_USER;
+
       const token = await currentUser.getIdToken();
-      const param: IReqVerifyToken = { token: await currentUser.getIdToken() }
-      const userInfoRes = await httpTokenVerify(param);
+      const loginRes = await httpLogin({ token });
+      // 사용자정보, 토큰 세션에 등록
+      const sessionRegistRes = await httpSessionRegist(loginRes);
+      // const param: IReqVerifyToken = { token: await currentUser.getIdToken() }
+      console.log(`SUJIN:: ~ onSubmit ~ sessionRegistRes`, sessionRegistRes)
+      // const userInfoRes = await httpTokenVerify(param);
 
-      setUserInfo(userInfoRes);
+      setUserInfo(sessionRegistRes?.user);
 
-      const authLogin = await httpLogin({ ...userInfoRes, token: await currentUser.getIdToken() });
+      // const authLogin = await httpLogin({ ...userInfoRes, token: await currentUser.getIdToken() });
 
       console.log(`SUJIN:: ~ onSubmit ~ userInfo`, userInfo)
 

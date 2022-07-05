@@ -37,12 +37,16 @@ export const boardWriteStyle = css`
       justify-content: center;
       align-items: center;
       button {
-        /* display: inline-block;
-        min-width: 100px; */
-        display: block;
-        width: 100%;
+        display: inline-block;
+        min-width: 100px;
+        /* display: block;
+        width: 100%; */
         min-height: 50px;
-        background-color: var(--survey-colors-blue-500);
+        
+        &.submit {
+          background-color: var(--survey-colors-blue-500);
+          color: #fff;
+        }
       }
     }
   }

@@ -19,52 +19,33 @@ interface IBoardListProps {
   surveyList: any
 }
 
-// export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-//   const res = await httpSurveyReadAll();
-//   console.log(`SUJIN:: ~ constgetServerSideProps:GetServerSideProps= ~ res`, res)
-
-//   return {
-//     props: { res }
-//   }
-// }
-
 /** 쿠키 매번 넣어줄 때는 이렇게 귀찮으니 interceptor로 구현*/
 export const getServerSideProps = withSessionSsr(
   async function getServerSideProps({ req }) {
+    try {
 
-    const user = req?.session?.user;
-    // const surveyList = await httpSurveyReadAll();
-    let Authorization: string = user?.token ? `Bearer ${user?.token}` : '';
-
-    const res = await axios.get(`http://localhost:3000/survey/list`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization
-      },
-    })
-
-    const surveyList = res.data;
-
-    return {
-      props: {
-        user: req?.session?.user ?? null,
-        surveyList,
-      },
-    };
+      console.log(`SUJIN:: ~ getServerSideProps ~ req.session.user`, req.session.user)
+      const surveyList = await httpSurveyReadAll(req.session.user);
+      return {
+        props: {
+          user: req?.session?.user ?? null,
+          surveyList
+        }
+      }
+    } catch (error) {
+      console.log(`SUJIN:: ~ getServerSideProps ~ error`, error)
+      return {
+        props: {
+          user: req?.session?.user ?? null,
+          surveyList: [],
+        },
+      };
+    }
   },
 );
 
 const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
   const [list, setList] = useState(surveyList);
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const resData = await httpSurveyReadAll();
-  //     setData(resData);
-  //   }
-
-  //   getData();
-  // }, [])
 
   const isLogin = useRecoilValue(authIsLogin);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -93,7 +74,7 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
                   <Th width={'40%'}>Title</Th>
                   <Th>Time</Th>
                   <Th>Target</Th>
-                  <Th>Date</Th>
+                  <Th>End date</Th>
                   <Th>Tag</Th>
                 </Tr>
               </Thead>
@@ -140,7 +121,7 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
               <ModalHeader>Write</ModalHeader>
               <ModalCloseButton />
               <ModalBody pb={6}>
-                <Write />
+                <Write onClose={onClose} />
               </ModalBody>
             </ModalContent>
           </Modal>
