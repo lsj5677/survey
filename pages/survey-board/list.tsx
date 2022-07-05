@@ -2,7 +2,7 @@
 import { Button, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Table, TableContainer, Tag, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react"
 import { GetServerSideProps, GetServerSidePropsContext } from "next"
 import { FunctionComponent, useEffect, useRef, useState } from "react"
-import { httpSurveyReadAll, httpTest } from "../../http/survey.http"
+import { httpSurveyReadAll } from "../../http/survey.http"
 import DefaultTemplate from "../../template/default.template"
 import { boardListStyle } from "../../styles/survey-board/list.style"
 import { withIronSessionSsr } from "iron-session/next/dist"
@@ -73,7 +73,7 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
                   <Th>Time</Th>
                   <Th>Target</Th>
                   <Th>End date</Th>
-                  <Th>Tag</Th>
+                  {/* <Th>Tag</Th> */}
                 </Tr>
               </Thead>
               <Tbody>
@@ -84,13 +84,13 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
                       <Td>{time}</Td>
                       <Td>{target}</Td>
                       <Td>{dayjs(createdAt).format('YYYY-MM-DD')}</Td>
-                      <Td>
+                      {/* <Td>
                         <HStack spacing={4}>
                           <Tag variant='solid' colorScheme='blue'>tag1</Tag>
                           <Tag variant='solid' colorScheme='blue'>tag2</Tag>
                           <Tag variant='solid' colorScheme='blue'>tag3</Tag>
                         </HStack>
-                      </Td>
+                      </Td> */}
                     </Tr>
                   })
                 }

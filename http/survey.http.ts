@@ -1,40 +1,17 @@
-import { IReqSurveyGetCreate } from "../httpType/survey.type";
-import { getHostUrl, http, httpGet } from "../utils/http.util";
-import axios from 'axios';
+import { IReqSurveyCreate } from "../httpType/survey.type";
+import { httpGet, httpPost } from "../utils/http.util";
 
-const hostUrl = getHostUrl();
-
-export const httpSurveyCreate = async (params: IReqSurveyGetCreate) => {
+export const httpSurveyCreate = async (params: IReqSurveyCreate) => {
   try {
-    const { title, date, time, target } = params;
-    const body = { title, date, time, target };
 
-    const createRes = await http(
-      `${hostUrl}/api/survey`,
-      {
-        method: 'POST',
-        body: JSON.stringify(body)
-      }
-    );
-
-    if (createRes.status === 500) throw 'INTERNAL_SERVER_ERROR';
-
-    return createRes;
-  } catch (error) {
-    throw error;
-  }
-}
-
-export const httpTest = async () => {
-  try {
-    const res = await axios.get(`http://localhost:8080/api/session`);
+    const res = await httpPost('survey/write', params);
     return res.data;
 
   } catch (error) {
     throw error;
   }
-
 }
+
 
 export const httpSurveyReadAll = async (user: any) => {
   try {

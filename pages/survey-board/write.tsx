@@ -6,13 +6,15 @@ import { useForm } from "react-hook-form";
 import { boardWriteStyle } from "../../styles/survey-board/write.style";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
+import { IReqSurveyCreate } from "../../httpType/survey.type";
+import { httpSurveyCreate } from "../../http/survey.http";
 
 interface IWriteInputs {
   title: string,
   time: string,
   target: string,
   endDate: Date,
-  tag?: [],
+  // tag?: [],
   link: string,
   description?: string
 }
@@ -21,8 +23,11 @@ const Write = (props: any) => {
   const { register, handleSubmit, getValues, trigger, formState: { errors, isSubmitting, dirtyFields } } = useForm<IWriteInputs>();
   const router = useRouter();
 
-  const onSubmit = async ({ title, time, target, endDate, tag, link, description }: IWriteInputs) => {
+  const onSubmit = async ({ title, time, target, endDate, link, description }: IWriteInputs) => {
     try {
+      const params: IReqSurveyCreate = { title, time, target, endDate, link, description }
+      const createRes = await httpSurveyCreate(params)
+
       alert('등록되었습니다')
 
     } catch (error: any) {
