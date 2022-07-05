@@ -4,13 +4,13 @@ import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { httpUserCreate } from '../../http/user.http'
 import DefaultTemplate from '../../template/default.template'
 import { IReqUserCreate } from '../../httpType/user.type'
 import { signUpStyle } from '../../styles/account/sign-up.style'
 import { EAUTH_ERROR } from '../../types/error.type';
 import { useRecoilState } from 'recoil';
 import { tempUserState } from '../../atoms/tempUser.atom';
+import { httpSignUp } from '../../http/auth.http';
 interface IShowPassword {
   password: boolean,
   confirmPassword: boolean,
@@ -43,7 +43,7 @@ const SignUp = () => {
         });
 
       const params: IReqUserCreate = { email, password, name, token: await user.getIdToken() };
-      const createRes = await httpUserCreate(params)
+      const createRes = await httpSignUp(params)
 
       setTempUser({ email });
       redirect();
