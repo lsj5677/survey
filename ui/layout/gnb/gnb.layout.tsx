@@ -26,6 +26,8 @@ const GnbLayout = () => {
   const auth = getAuth();
   const isLogin = useRecoilValue(authIsLogin);
 
+  // recoil, IIronsession 비워주기 = 공통유틸
+
   return (
     <header css={headerStyle}>
       <div className="header-container">

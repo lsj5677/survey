@@ -24,6 +24,7 @@ export const getServerSideProps = withSessionSsr(
   async function getServerSideProps({ req }) {
     try {
       const surveyList = await httpSurveyReadAll(req.session.user);
+      console.log(`SUJIN:: ~ getServerSideProps ~ surveyList`, surveyList)
       return {
         props: {
           user: req?.session?.user ?? null,
@@ -78,12 +79,12 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
               </Thead>
               <Tbody>
                 {
-                  list.map(({ title, date, time, target, createdAt }: any, index: number) => {
+                  list.map(({ title, time, target, endDate }: any, index: number) => {
                     return <Tr key={index}>
                       <Td><Link href={'/survey-board/detail'}>{title}</Link></Td>
                       <Td>{time}</Td>
                       <Td>{target}</Td>
-                      <Td>{dayjs(createdAt).format('YYYY-MM-DD')}</Td>
+                      <Td>{dayjs(+endDate).format('YYYY-MM-DD')}</Td>
                       {/* <Td>
                         <HStack spacing={4}>
                           <Tag variant='solid' colorScheme='blue'>tag1</Tag>

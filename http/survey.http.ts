@@ -1,10 +1,11 @@
 import { IReqSurveyCreate } from "../httpType/survey.type";
+import { IIronSessionUser } from "../types/auth.type";
 import { httpGet, httpPost } from "../utils/http.util";
 
-export const httpSurveyCreate = async (params: IReqSurveyCreate) => {
+export const httpSurveyCreate = async (params: IReqSurveyCreate, userInfo?: IIronSessionUser) => {
   try {
 
-    const res = await httpPost('survey/write', params);
+    const res = await httpPost('survey/write', params, userInfo);
     return res.data;
 
   } catch (error) {

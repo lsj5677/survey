@@ -11,6 +11,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfoState } from "../../atoms/auth.atom";
 import { authIsLogin } from "../../selectors/auth.selector";
 import { httpLogin, httpSessionRegist } from "../../http/auth.http";
+import router from "next/router";
 
 interface ISignInInputs {
   email: string,
@@ -32,11 +33,11 @@ const SignIn = () => {
       console.log(`SUJIN:: ~ onSubmit ~ auth.currentUser`, auth.currentUser)
       const currentUser = auth.currentUser
 
-      // if (!currentUser?.emailVerified) {
-      //   alert('이메일 인증을 완료해주세요');
-      //   await auth.signOut();
-      //   return;
-      // }
+      if (!currentUser?.emailVerified) {
+        alert('이메일 인증을 완료해주세요');
+        await auth.signOut();
+        return;
+      }
 
       // token -> server 보내기
       if (!currentUser) throw EAUTH_ERROR.EMPTY_USER;
@@ -55,9 +56,11 @@ const SignIn = () => {
       // const authLogin = await httpLogin({ ...userInfoRes, token: await currentUser.getIdToken() });
 
       console.log(`SUJIN:: ~ onSubmit ~ userInfo`, userInfo)
-
+      router.push('/');
 
       // database userinfo -> access token으로 불러와야함
+
+
     } catch (error: any) {
       if (error === EAUTH_ERROR.EMPTY_USER) {
         alert('사용자를 찾을 수 없습니다.')
@@ -76,9 +79,9 @@ const SignIn = () => {
         <div className="sign-in-container">
           <div className="sign-in-items">
             <h1 className="logo">SURV<span>e</span>Y</h1>
-            {
+            {/* {
               isLogin ? 'true' : 'false'
-            }
+            } */}
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl isRequired isInvalid={dirtyFields.email && !!errors?.email}>
                 <FormLabel htmlFor='email'>Email</FormLabel>
