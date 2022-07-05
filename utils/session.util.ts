@@ -40,23 +40,5 @@ export function withSessionSsr<
   >(
     getServerSideProps: GetServerSideProps
   ) {
-  return withIronSessionSsr(withAuth(getServerSideProps), sessionOptions);
-}
-
-export const withAuth = (getServerSideProps: GetServerSideProps) => {
-
-  return async (context: GetServerSidePropsContext) => {
-    // const token = context?.req?.session?.user?.accessToken;
-    // let Authorization: string = token ? `Bearer ${token}` : '';
-    // axios.interceptors.request.use(
-    //   (config: AxiosRequestConfig<any>) => {
-    //     config.headers = { ...config.headers, Authorization }
-    //     return config
-    //   },
-    //   (error) => {
-    //     return Promise.reject(error)
-    //   }
-    // )
-    return await getServerSideProps(context);
-  }
+  return withIronSessionSsr(getServerSideProps, sessionOptions);
 }

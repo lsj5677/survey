@@ -12,6 +12,15 @@ export const httpLogin = async (params: IReqAuthLogin) => {
   }
 }
 
+export const httpGetSession = async () => {
+  try {
+    const res = await axios.get(`http://localhost:8080/api/session`);
+    return res.data
+  } catch (error) {
+    throw error;
+  }
+}
+
 export const httpSessionRegist = async (params: any) => {
   try {
     const res = await axios.post(`http://localhost:8080/api/session`, params);

@@ -2,51 +2,25 @@
 import { css } from '@emotion/react';
 import { Suspense, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { IUserInfo, userInfoState } from '../atoms/auth.atom';
+import { userInfoState } from '../atoms/auth.atom';
 import FooterLayout from '../ui/layout/footer/footer.layout';
 import GnbLayout from '../ui/layout/gnb/gnb.layout';
 import MainLayout from '../ui/layout/main/main.layout';
-import { authInit } from '../utils/auth.util';
-import { getAuth } from "firebase/auth";
-import axios, { AxiosRequestConfig } from 'axios';
-import { httpSessionClear } from '../http/auth.http';
+import { httpGetSession } from '../http/auth.http';
 
 const DefaultTemplate = (props: any) => {
 
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  console.log(`SUJIN:: ~ DefaultTemplate ~ userInfo`, userInfo)
 
-  const appInit = () => {
-    const auth = getAuth();
-    // firebase 제공 onAuthStateChanged:::lifecycle event 비슷 
-    auth.onAuthStateChanged(async (firebaseUser) => {
+  const appInit = async () => {
+    // session에 userInfo recoil에 넣어주기
+    const sessionRes = await httpGetSession();
+    setUserInfo(sessionRes.user);
 
-      console.log(`SUJIN:: ~ useEffect ~ user 1111111`, firebaseUser)
-
-      if (!firebaseUser) {
-        setUserInfo({} as IUserInfo);
-        await httpSessionClear();
-
-        return false;
-      }
-
-      if (!firebaseUser.emailVerified) return false;
-
-      const userInfoRes = await authInit(firebaseUser)
-      if (userInfoRes) setUserInfo(userInfoRes)
-
-      const token = await firebaseUser.getIdToken();
-      let Authorization: string = token ? `Bearer ${token}` : '';
-
-      // axiosInterceptorConfig(Authorization);
-    })
+    // client 쪽에서 session 부를 떄는 recoil
+    // ssr에서 부를 때는 withSessionSsr 사용 : [session.util.ts] => req.session.user에 접근가능
   }
-
-  // const axiosInterceptorConfig = (auth: string) => {
-  //   axios.interceptors.request.use((config: AxiosRequestConfig<any>) => {
-  //     config.headers = { ...config.headers, Authorization: auth }
-  //     return config
-  //   })
-  // }
 
   // nextjs Auth : iron session : session 관리 | next auth : token으로 
   // next / nest 로 분리해서 사용 x

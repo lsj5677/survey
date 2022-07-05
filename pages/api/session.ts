@@ -12,6 +12,12 @@ export default withIronSessionApiRoute(
     const { userInfo, accessToken, refreshToken } = body;
 
     switch (method) {
+      case 'GET':
+        const user = req?.session?.user
+        res.json({ user });
+
+        break;
+
       case 'POST':
         req.session.destroy();
         // 사용자등록

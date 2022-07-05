@@ -23,8 +23,6 @@ interface IBoardListProps {
 export const getServerSideProps = withSessionSsr(
   async function getServerSideProps({ req }) {
     try {
-
-      console.log(`SUJIN:: ~ getServerSideProps ~ req.session.user`, req.session.user)
       const surveyList = await httpSurveyReadAll(req.session.user);
       return {
         props: {

@@ -43,6 +43,7 @@ const SignIn = () => {
 
       const token = await currentUser.getIdToken();
       const loginRes = await httpLogin({ token });
+
       // 사용자정보, 토큰 세션에 등록
       const sessionRegistRes = await httpSessionRegist(loginRes);
       // const param: IReqVerifyToken = { token: await currentUser.getIdToken() }
