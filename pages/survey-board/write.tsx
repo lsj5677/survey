@@ -25,7 +25,6 @@ const Write = (props: any) => {
     try {
       alert('등록되었습니다')
 
-
     } catch (error: any) {
       console.log(`SUJIN:: ~ onSubmit ~ error`, JSON.stringify(error))
     }
