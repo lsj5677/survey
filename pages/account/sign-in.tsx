@@ -30,7 +30,7 @@ const SignIn = () => {
       await signInWithEmailAndPassword(auth, email, password);
 
       // firebase 유저정보 : auth.currentUser;
-      console.log(`SUJIN:: ~ onSubmit ~ auth.currentUser`, auth.currentUser)
+      console.debug(`SUJIN:: ~ onSubmit ~ auth.currentUser`, auth.currentUser)
       const currentUser = auth.currentUser
 
       if (!currentUser?.emailVerified) {
@@ -48,14 +48,14 @@ const SignIn = () => {
       // 사용자정보, 토큰 세션에 등록
       const sessionRegistRes = await httpSessionRegist(loginRes);
       // const param: IReqVerifyToken = { token: await currentUser.getIdToken() }
-      console.log(`SUJIN:: ~ onSubmit ~ sessionRegistRes`, sessionRegistRes)
+      console.debug(`SUJIN:: ~ onSubmit ~ sessionRegistRes`, sessionRegistRes)
       // const userInfoRes = await httpTokenVerify(param);
 
       setUserInfo(sessionRegistRes?.user);
 
       // const authLogin = await httpLogin({ ...userInfoRes, token: await currentUser.getIdToken() });
 
-      console.log(`SUJIN:: ~ onSubmit ~ userInfo`, userInfo)
+      console.debug(`SUJIN:: ~ onSubmit ~ userInfo`, userInfo)
       router.push('/');
 
       // database userinfo -> access token으로 불러와야함
@@ -68,7 +68,7 @@ const SignIn = () => {
         alert('비밀번호를 확인하세요.')
       } else {
         alert('서버 요청에 실패했습니다.')
-        console.log(error);
+        console.debug(error);
       };
     }
   }

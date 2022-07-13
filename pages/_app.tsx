@@ -6,6 +6,8 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { RecoilRoot, useRecoilState } from 'recoil'
 import { firebaseConfig } from "../config/firebase.config";
 import { IIronSessionUser } from "../types/auth.type";
+import { consoleDebugSetting } from "../utils/environment.util";
+import { STAGE_TYPE } from "../types/environment.type";
 
 // type 확장
 declare module 'iron-session' {
@@ -22,6 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   if (app.name && typeof window !== 'undefined') {
     analytics = getAnalytics(app);
+    consoleDebugSetting(STAGE_TYPE.LOCAL)
   }
 
 

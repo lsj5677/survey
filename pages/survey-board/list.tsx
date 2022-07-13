@@ -9,10 +9,13 @@ import { withIronSessionSsr } from "iron-session/next/dist"
 import { withSessionSsr } from "../../utils/session.util"
 import axios from "axios"
 import Link from "next/link"
-import { useRecoilValue } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { authIsLogin } from "../../selectors/auth.selector"
 import dayjs from 'dayjs'
 import Write from "./write"
+import { userInfoState } from "../../atoms/auth.atom"
+import { url } from "inspector"
+import { useRouter } from "next/router"
 
 interface IBoardListProps {
   user: any,
@@ -21,10 +24,10 @@ interface IBoardListProps {
 
 /** 쿠키 매번 넣어줄 때는 이렇게 귀찮으니 interceptor로 구현*/
 export const getServerSideProps = withSessionSsr(
-  async function getServerSideProps({ req }) {
+  async function getServerSideProps({ req, query }) {
     try {
-      const surveyList = await httpSurveyReadAll(req.session.user);
-      console.log(`SUJIN:: ~ getServerSideProps ~ surveyList`, surveyList)
+      const surveyList = await httpSurveyReadAll(req.session.user, query);
+      // console.debug(`SUJIN:: ~ getServerSideProps ~ surveyList`, surveyList)
       return {
         props: {
           user: req?.session?.user ?? null,
@@ -32,7 +35,7 @@ export const getServerSideProps = withSessionSsr(
         }
       }
     } catch (error) {
-      console.log(`SUJIN:: ~ getServerSideProps ~ error`, error)
+      console.debug(`SUJIN:: ~ getServerSideProps ~  error`, error)
       return {
         props: {
           user: req?.session?.user ?? null,
@@ -45,12 +48,56 @@ export const getServerSideProps = withSessionSsr(
 
 const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
   const [list, setList] = useState(surveyList);
+  console.debug(`SUJIN:: ~ list`, list)
+
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
   const isLogin = useRecoilValue(authIsLogin);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = useRef(null)
   const finalRef = useRef(null)
+  const router = useRouter()
 
+  const [limit, setLimit] = useState(10);
+  const [currentPage, setCurrentPage] = useState(list.meta.currentPage);
+  const [totalPages, setTotalPages] = useState(list.meta.totalPages);
+
+
+  const getTotalPages = (currentPage: number, totalPages: number) => {
+
+    const basis = Math.floor((currentPage - 1) / limit);
+    const start = basis * 10 + 1;
+    const end = start + 9 < totalPages ? start + 9 : totalPages;
+
+    let totalPagesArr: any = [];
+
+    for (let i = start; i <= end; i++) {
+      totalPagesArr.push(i);
+    }
+
+    // console.debug(`SUJIN:: ~ getTotalPages ~ totalPagesArr`, totalPagesArr)
+    return totalPagesArr;
+  }
+
+  const [paginate, setPaginate] = useState(getTotalPages(list.meta.currentPage, list.meta.totalPages));
+  // console.debug(`SUJIN:: ~ paginate`, paginate)
+
+  const loadSurveyList = async (page: number = 1, limit: number) => {
+    if (page < 1 || totalPages < page) return;
+
+    const options = { page, limit }
+
+    setCurrentPage(page);
+    const surveyListAll = await httpSurveyReadAll(userInfo, options)
+    const newPagination = getTotalPages(surveyListAll.meta.currentPage, surveyListAll.meta.totalPages)
+    setPaginate(newPagination)
+    // list 새로 받아 옴
+    setList(surveyListAll)
+    router.replace({
+      pathname: '/survey-board/list',
+      query: options,
+    })
+  }
 
 
   return (
@@ -79,7 +126,7 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
               </Thead>
               <Tbody>
                 {
-                  list.map(({ title, time, target, endDate }: any, index: number) => {
+                  list.items.map(({ title, time, target, endDate }: any, index: number) => {
                     return <Tr key={index}>
                       <Td><Link href={'/survey-board/detail'}>{title}</Link></Td>
                       <Td>{time}</Td>
@@ -98,14 +145,18 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
               </Tbody>
             </Table>
           </TableContainer>
-          <Button onClick={onOpen} className='write-button'>Write</Button>
+          {
+            isLogin && <Button onClick={onOpen} className='write-button'>Write</Button>
+          }
           <div className="pagination">
             <ul>
-              <li><a href="">1</a></li>
-              <li className="active"><a href="">2</a></li>
-              <li><a href="">3</a></li>
-              <li><a href="">4</a></li>
-              <li><a href="">5</a></li>
+              <li onClick={() => loadSurveyList(currentPage - 1, limit)}>prev</li>
+              {
+                paginate.map((page: number, index: number) => {
+                  return <li key={index} onClick={() => loadSurveyList(page, limit)} className={page === currentPage ? 'active' : ''}>{page}</li>
+                })
+              }
+              <li onClick={() => loadSurveyList(currentPage + 1, limit)}>next</li>
             </ul>
           </div>
           <Modal
@@ -113,6 +164,7 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
             finalFocusRef={finalRef}
             isOpen={isOpen}
             onClose={onClose}
+            onCloseComplete={() => { loadSurveyList(1, limit) }}
             size={'xl'}
           >
             <ModalOverlay />

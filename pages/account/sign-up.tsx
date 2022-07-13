@@ -35,7 +35,7 @@ const SignUp = () => {
       const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
       const user = userCredential.user;
-      console.log(`SUJIN:: ~ onSubmit ~ user`, user)
+      console.debug(`SUJIN:: ~ onSubmit ~ user`, user)
 
       sendEmailVerification(user)
         .then(() => {
@@ -49,7 +49,7 @@ const SignUp = () => {
       redirect();
 
     } catch (error: any) {
-      console.log(`SUJIN:: ~ onSubmit ~ error`, JSON.stringify(error))
+      console.debug(`SUJIN:: ~ onSubmit ~ error`, JSON.stringify(error))
       if (error.code === EAUTH_ERROR.ALREADY_USER) {
         alert('이미 등록된 이메일 입니다.')
       } else if (error.code === EAUTH_ERROR.INVALID_EMAIL) {

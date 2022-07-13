@@ -9,12 +9,12 @@ import { useRouter } from "next/router"
 const EmailSended = () => {
   const router = useRouter();
   const [tempUser, setTempUser] = useRecoilState(tempUserState);
-  console.log(`SUJIN:: ~ EmailSended ~ tempUser`, tempUser.email)
+  console.debug(`SUJIN:: ~ EmailSended ~ tempUser`, tempUser.email)
 
 
   // useEffect(() => {
   //   return () => {
-  //     console.log('return >>>>>>')
+  //     console.debug('return >>>>>>')
   //     setTempUser({} as ITempUser);
   //   }
   // }, [])

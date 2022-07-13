@@ -45,6 +45,7 @@ export const boardListStyle = css`
         gap: 0 1em;
 
         li {
+          cursor: pointer;
           &.active {
             position: relative;
             display: inline-block;

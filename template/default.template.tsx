@@ -11,7 +11,7 @@ import { httpGetSession } from '../http/auth.http';
 const DefaultTemplate = (props: any) => {
 
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-  // console.log(`SUJIN:: ~ DefaultTemplate ~ userInfo`, userInfo)
+  // console.debug(`SUJIN:: ~ DefaultTemplate ~ userInfo`, userInfo)
 
   const appInit = async () => {
     // session에 userInfo recoil에 넣어주기

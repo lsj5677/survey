@@ -30,13 +30,6 @@ const Detail = () => {
               </div>
             </Link>
           </div>
-          <div className="detail-footer">
-            <HStack spacing={2} className='tag-list'>
-              <Tag variant='solid'>tag1</Tag>
-              <Tag variant='solid'>tag2</Tag>
-              <Tag variant='solid'>tag3</Tag>
-            </HStack>
-          </div>
           <Link href={'/survey-board/list'}>Go back</Link>
         </div>
       </div>

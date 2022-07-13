@@ -28,18 +28,19 @@ const Write = (props: any) => {
   const router = useRouter();
 
   const onSubmit = async ({ title, time, target, endDate, link, description }: IWriteInputs) => {
-    console.log(`SUJIN:: ~ onSubmit ~ endDate`, typeof endDate)
-    console.log(`SUJIN:: ~ onSubmit ~ endDate`, endDate)
-    console.log(`SUJIN:: ~ onSubmit ~ endDate`, endDate instanceof Date)
     try {
       const params: IReqSurveyCreate = { title, time, target, endDate: endDate.getTime(), link, description }
-      console.log(`SUJIN:: ~ onSubmit ~ params`, params)
+      console.debug(`SUJIN:: ~ onSubmit ~ params`, params)
       const createRes = await httpSurveyCreate(params, userInfo)
 
-      alert('등록되었습니다')
+      if (window.confirm('등록하시겠습니까?')) {
+        alert('등록되었습니다')
+        props.onClose();
+      }
+
 
     } catch (error: any) {
-      console.log(`SUJIN:: ~ onSubmit ~ error`, JSON.stringify(error))
+      console.debug(`SUJIN:: ~ onSubmit ~ error`, JSON.stringify(error))
     }
   }
 

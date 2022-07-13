@@ -1,10 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import Link from "next/link"
-import { useRecoilValue } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { authIsLogin } from "../../../selectors/auth.selector"
 import { IMenu } from "../../../types/router.type"
 import { headerStyle } from "./gnb.layout.style"
 import { getAuth } from "firebase/auth";
+import { IUserInfo, userInfoState } from "../../../atoms/auth.atom"
+import { httpSessionClear } from "../../../http/auth.http"
 
 const GnbLayout = () => {
 
@@ -25,8 +27,16 @@ const GnbLayout = () => {
 
   const auth = getAuth();
   const isLogin = useRecoilValue(authIsLogin);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
   // recoil, IIronsession 비워주기 = 공통유틸
+  const handleLogout = async () => {
+    if (window.confirm('Are you sure you want to Logout?')) {
+      setUserInfo({} as IUserInfo);
+      const sessionRes = await httpSessionClear();
+      auth.signOut();
+    }
+  }
 
   return (
     <header css={headerStyle}>
@@ -53,7 +63,7 @@ const GnbLayout = () => {
               :
               <div>
                 <Link href="/account/my-page">My page</Link>
-                <button onClick={() => auth.signOut()}>Logout</button>
+                <button onClick={handleLogout}>Logout</button>
               </div>
           }
         </div>
