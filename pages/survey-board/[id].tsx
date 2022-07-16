@@ -1,75 +1,101 @@
 /** @jsxImportSource @emotion/react */
-import { HStack, Tag } from "@chakra-ui/react"
+import { Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Tag, useDisclosure } from "@chakra-ui/react"
+import dayjs from "dayjs"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { FunctionComponent } from "react"
+import { FunctionComponent, useRef } from "react"
 import { httpSurveyReadAll, httpSurveyReadDetail } from "../../http/survey.http"
 import { boardDetailStyle } from "../../styles/survey-board/detail.style"
 import DefaultTemplate from "../../template/default.template"
 import { withSessionSsr } from "../../utils/session.util"
+import { MdDoubleArrow } from "react-icons/md";
+import Edit from "./edit"
 
 interface IBoardListIdProps {
   user: any,
-  surveyList: any
+  surveyDetail: any
 }
 
 /** 쿠키 매번 넣어줄 때는 이렇게 귀찮으니 interceptor로 구현*/
 export const getServerSideProps = withSessionSsr(
-  async function getServerSideProps({ req, query }) {
-    console.debug(`SUJIN:: ~ getServerSideProps ~ req`, req)
+  async function getServerSideProps({ req, params }) {
     try {
-      const surveyList = await httpSurveyReadDetail(req.session.user, query);
+      console.debug('asdfasdf')
+      const surveyDetail = await httpSurveyReadDetail(req.session.user, params);
       return {
         props: {
           user: req?.session?.user ?? null,
-          surveyList
+          surveyDetail
         }
       }
     } catch (error) {
-      console.debug(`SUJIN:: ~ getServerSideProps ~  error`, error)
       return {
         props: {
           user: req?.session?.user ?? null,
-          surveyList: [],
+          surveyDetail: [],
         },
       };
     }
   },
 );
 
-const Detail: FunctionComponent<IBoardListIdProps> = ({ surveyList }) => {
-  console.debug(`SUJIN:: ~ surveyList 222`, surveyList)
+const Detail: FunctionComponent<IBoardListIdProps> = ({ user, surveyDetail }) => {
+  console.debug(`SUJIN:: ~ surveyDetail`, surveyDetail)
 
-  const router = useRouter()
-  const { postId } = router.query
-  console.log('postId: ', postId);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const initialRef = useRef(null)
+  const finalRef = useRef(null)
 
   return (
     <DefaultTemplate>
       <div css={boardDetailStyle}>
         <div className="board-detail-container">
           <div className="detail-header">
-            <h4>this title area</h4>
-            <span>2022-06-25</span>
+            <h4>{surveyDetail.title}</h4>
+            <span>{dayjs(surveyDetail.createdAt).format('YYYY-MM-DD')}</span>
           </div>
           <div className="detail-body">
-            <span className="end-date">End date : 2022-07-03</span>
+            <ul className="survey-info">
+              <li>[소요시간] : {surveyDetail.time}</li>
+              <li>[마감일자] : {dayjs(+surveyDetail.endDate).format('YYYY-MM-DD')}</li>
+            </ul>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Voluptates maiores neque earum alias excepturi unde fugit odit sequi iste error culpa,
-              facilis molestias nihil. Quibusdam odit maiores eaque hic similique in distinctio animi
-              quas officia consequuntur quae expedita ducimus, vel sapiente ipsam ad modi velit dolor quo
-              facilis asperiores placeat!
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptate hic at omnis tempora libero. Perferendis tenetur molestias, sit eum laborum assumenda non sapiente magni vero quam consectetur placeat adipisci omnis dolorum architecto aliquam obcaecati explicabo aut, in, molestiae ratione ipsum. Beatae cumque architecto hic sit quasi ipsam ipsa, accusantium quibusdam tenetur nemo consequatur eveniet tempora ut odio deserunt voluptas at natus laborum magnam veritatis aut, minus perspiciatis, quia officiis! Hic molestiae nostrum amet quis doloremque ex dolor animi quibusdam. Nesciunt!
+              <span>[상세설명]</span>
+              {
+                surveyDetail.description ? surveyDetail.description : <span className="empty">설명이 없습니다.</span>
+              }
             </p>
-            <Link href={'/'}>
-              <div className="link-box">
-                <span className="link-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span>
-                <span className="go-to-link">GO TO LINK &gt;</span>
-              </div>
-            </Link>
+            <a href={`https://${surveyDetail.link}`} target='_blank' className="go-to-link">
+              GO TO LINK <MdDoubleArrow />
+            </a>
           </div>
-          <Link href={'/survey-board/list'}>Go back</Link>
+          <div className="button-group">
+            {
+              surveyDetail.userId === user?.id &&
+              <>
+                <Button onClick={onOpen}>Edit</Button>
+                <Link href={'/'}>Delete</Link>
+              </>
+            }
+            <Link href={'/survey-board/list'}>List</Link>
+          </div>
+          <Modal
+            initialFocusRef={initialRef}
+            finalFocusRef={finalRef}
+            isOpen={isOpen}
+            onClose={onClose}
+            // onCloseComplete={() => { loadSurveyList(1, limit) }}
+            size={'xl'}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Write</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody pb={6}>
+                <Edit onClose={onClose} surveyDetail={surveyDetail} />
+              </ModalBody>
+            </ModalContent>
+          </Modal>
         </div>
       </div>
     </DefaultTemplate>

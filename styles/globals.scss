@@ -4,6 +4,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  min-width: 840px;
 }
 
 a {
@@ -37,6 +38,7 @@ h1.logo {
   --survey-layout-max-width: 1600px;
   --survey-content-max-width: 1600px;
 
+  --survey-colors-blue-700: #01316c;
   --survey-colors-blue-500: #00469d;
 
   --survey-colors-gray-500: #333;

@@ -16,6 +16,7 @@ import Write from "./write"
 import { userInfoState } from "../../atoms/auth.atom"
 import { url } from "inspector"
 import { useRouter } from "next/router"
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight, } from "react-icons/md";
 
 interface IBoardListProps {
   user: any,
@@ -27,7 +28,6 @@ export const getServerSideProps = withSessionSsr(
   async function getServerSideProps({ req, query }) {
     try {
       const surveyList = await httpSurveyReadAll(req.session.user, query);
-      // console.debug(`SUJIN:: ~ getServerSideProps ~ surveyList`, surveyList)
       return {
         props: {
           user: req?.session?.user ?? null,
@@ -35,7 +35,6 @@ export const getServerSideProps = withSessionSsr(
         }
       }
     } catch (error) {
-      console.debug(`SUJIN:: ~ getServerSideProps ~  error`, error)
       return {
         props: {
           user: req?.session?.user ?? null,
@@ -48,7 +47,6 @@ export const getServerSideProps = withSessionSsr(
 
 const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
   const [list, setList] = useState(surveyList);
-  console.debug(`SUJIN:: ~ list`, list)
 
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const isLogin = useRecoilValue(authIsLogin);
@@ -58,16 +56,16 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
   const router = useRouter()
 
   const [limit, setLimit] = useState<number>(10);
-  console.debug(`SUJIN:: ~ limit`, limit)
   const [itemCount, setItemCount] = useState(list.meta.itemCount);
   const [currentPage, setCurrentPage] = useState(list.meta.currentPage);
   const [totalPages, setTotalPages] = useState(list.meta.totalPages);
 
-  const moveDetail = (listItemsId: string) => router.push(`/survey-board/${listItemsId}`)
+  // client addr
+  const moveDetail = (id: string) => router.push(`/survey-board/${id}`)
 
   const getTotalPages = (currentPage: number, totalPages: number) => {
 
-    const basis = Math.floor((currentPage - 1) / limit);
+    const basis = Math.floor((currentPage - 1) / 10);
     const start = basis * 10 + 1;
     const end = start + 9 < totalPages ? start + 9 : totalPages;
 
@@ -77,18 +75,16 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
       totalPagesArr.push(i);
     }
 
-    // console.debug(`SUJIN:: ~ getTotalPages ~ totalPagesArr`, totalPagesArr)
     return totalPagesArr;
   }
 
   const [paginate, setPaginate] = useState(getTotalPages(list.meta.currentPage, list.meta.totalPages));
-  // console.debug(`SUJIN:: ~ paginate`, paginate)
 
   const loadSurveyList = async (page: number = 1, limit: number) => {
-    if (page < 1 || totalPages < page) return;
+    setTotalPages(list.meta.totalPages)
 
+    if (page < 1 || totalPages < page) return;
     const options = { page, limit }
-    console.debug(`SUJIN:: ~ loadSurveyList ~ limit`, limit)
 
     setCurrentPage(page);
     const surveyListAll = await httpSurveyReadAll(userInfo, options)
@@ -102,15 +98,19 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
     })
   }
 
+  const handleLimitList = (limitValue: any) => {
+    setLimit(limitValue);
+    loadSurveyList(1, limitValue)
+  }
+
 
   return (
     <DefaultTemplate>
-      {/* <button onClick={() => { httpTest() }}>test-button</button> */}
       <div css={boardListStyle}>
         <div className="board-list-container">
           <div className="per-page-count">
             <span>Show rows per page</span>
-            <Select size={'sm'} defaultValue={'10'} onChange={(e) => setLimit(+e.target.value)}>
+            <Select size={'sm'} defaultValue={'10'} onChange={(e) => handleLimitList(+e.target.value)}>
               <option value='5'>5</option>
               <option value='10'>10</option>
               <option value='15'>15</option>
@@ -131,7 +131,7 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
                 {
                   list.items.map(({ title, time, target, endDate, id }: any, index: number) => {
                     return <Tr key={index}>
-                      <Td onClick={() => moveDetail(id)}>{title}</Td>
+                      <Td className='title' onClick={() => moveDetail(id)}>{title}</Td>
                       <Td>{time}</Td>
                       <Td>{target}</Td>
                       <Td>{dayjs(+endDate).format('YYYY-MM-DD')}</Td>
@@ -153,13 +153,13 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
           }
           <div className="pagination">
             <ul>
-              <li onClick={() => loadSurveyList(currentPage - 1, limit)}>prev</li>
+              <li onClick={() => loadSurveyList(currentPage - 1, limit)}><MdKeyboardArrowLeft /></li>
               {
                 paginate.map((page: number, index: number) => {
                   return <li key={index} onClick={() => loadSurveyList(page, limit)} className={page === currentPage ? 'active' : ''}>{page}</li>
                 })
               }
-              <li onClick={() => loadSurveyList(currentPage + 1, limit)}>next</li>
+              <li onClick={() => loadSurveyList(currentPage + 1, limit)}><MdKeyboardArrowRight /></li>
             </ul>
           </div>
           <Modal

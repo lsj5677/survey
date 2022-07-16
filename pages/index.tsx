@@ -31,7 +31,7 @@ const Home: NextPage = () => {
                 </p>
               </div>
               <div className="section-item link">
-                <Link href="">Details</Link>
+                <Link href="/">Details</Link>
               </div>
             </div>
           </section>

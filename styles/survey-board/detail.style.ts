@@ -26,7 +26,8 @@ export const boardDetailStyle = css`
     }
 
     .detail-body {
-      padding: 1em;
+      padding: 2em 1em;
+      border-bottom: 1px solid #eee;
 
       span {
         display: block;
@@ -40,27 +41,51 @@ export const boardDetailStyle = css`
       p {
         margin: 2em auto;
         word-break: keep-all;
+        white-space: break-spaces;
+
+        .empty {
+          color: var(--survey-colors-gray-300);
+        }
       }
 
-      .link-box {
+      .go-to-link {
         display: flex;
         align-items: center;
-        border: 1px solid var(--survey-colors-gray-200);
-        border-radius: 6px;
-        padding: 2em;
+        justify-content: center;
+        background-color: var(--survey-colors-blue-500);
+        color: #fff;
+        padding: 1em 0;
+        border-radius: 30px;
+        width: 190px;
+        height: 60px;
+        text-align: center;
+        margin: 0 auto;
         cursor: pointer;
+        line-height: 0;
 
-        .link-desc {
-          flex: auto;
+        svg {
+          display: inline-block;
+          vertical-align: middle;
+          width: 22px;
+          height: 22px;
+          margin-left: 5px;
         }
 
-        .go-to-link {
-          background-color: var(--survey-colors-blue-500);
-          color: #fff;
-          padding: 1em 2em;
-          border-radius: 30px;
-
+        &:hover {
+          background-color: var(--survey-colors-blue-700);
+          transition: background-color .3s ease-in-out;
         }
+      }
+    }
+
+
+    .button-group {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      a {
+        margin-left: 1em;
       }
     }
 
@@ -78,15 +103,14 @@ export const boardDetailStyle = css`
       }
     }
 
-    a {
+    a, button {
       display: inline-block;
-      width: 120px;
+      width: 90px;
       height: 40px;
       line-height: 40px;
       text-align: center;
-      margin-left: auto;
       display: block;
-      margin-top: 3em;
+      margin-top: 1em;
       background-color: var(--survey-colors-gray-200);
       border-radius: 6px;
       font-size: 0.9em;
