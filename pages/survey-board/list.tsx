@@ -51,17 +51,19 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
   console.debug(`SUJIN:: ~ list`, list)
 
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-
   const isLogin = useRecoilValue(authIsLogin);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = useRef(null)
   const finalRef = useRef(null)
   const router = useRouter()
 
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState<number>(10);
+  console.debug(`SUJIN:: ~ limit`, limit)
+  const [itemCount, setItemCount] = useState(list.meta.itemCount);
   const [currentPage, setCurrentPage] = useState(list.meta.currentPage);
   const [totalPages, setTotalPages] = useState(list.meta.totalPages);
 
+  const moveDetail = (listItemsId: string) => router.push(`/survey-board/${listItemsId}`)
 
   const getTotalPages = (currentPage: number, totalPages: number) => {
 
@@ -86,6 +88,7 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
     if (page < 1 || totalPages < page) return;
 
     const options = { page, limit }
+    console.debug(`SUJIN:: ~ loadSurveyList ~ limit`, limit)
 
     setCurrentPage(page);
     const surveyListAll = await httpSurveyReadAll(userInfo, options)
@@ -107,10 +110,10 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
         <div className="board-list-container">
           <div className="per-page-count">
             <span>Show rows per page</span>
-            <Select size={'sm'} defaultValue={'option2'}>
-              <option value='option1'>5</option>
-              <option value='option2'>10</option>
-              <option value='option3'>15</option>
+            <Select size={'sm'} defaultValue={'10'} onChange={(e) => setLimit(+e.target.value)}>
+              <option value='5'>5</option>
+              <option value='10'>10</option>
+              <option value='15'>15</option>
             </Select>
           </div>
           <TableContainer>
@@ -126,9 +129,9 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
               </Thead>
               <Tbody>
                 {
-                  list.items.map(({ title, time, target, endDate }: any, index: number) => {
+                  list.items.map(({ title, time, target, endDate, id }: any, index: number) => {
                     return <Tr key={index}>
-                      <Td><Link href={'/survey-board/detail'}>{title}</Link></Td>
+                      <Td onClick={() => moveDetail(id)}>{title}</Td>
                       <Td>{time}</Td>
                       <Td>{target}</Td>
                       <Td>{dayjs(+endDate).format('YYYY-MM-DD')}</Td>

@@ -13,7 +13,7 @@ const GnbLayout = () => {
   const gnbMenus: IMenu[] = [
     {
       name: "About",
-      address: "/about"
+      address: "/about/about"
     },
     {
       name: "Survey",
@@ -21,7 +21,7 @@ const GnbLayout = () => {
     },
     {
       name: "Q&A",
-      address: "/qna"
+      address: "/qna/qna"
     }
   ]
 

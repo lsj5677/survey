@@ -32,3 +32,9 @@ export const httpSurveyReadAll = async (user: any, options?: any) => {
     throw error;
   }
 }
+
+export const httpSurveyReadDetail = async (user: any, options?: any) => {
+  console.debug(`SUJIN:: ~ httpSurveyReadDetail ~ user`, user)
+  console.debug(`SUJIN:: ~ httpSurveyReadDetail ~ options`, options)
+  const res = await httpGet(`survey/list-one/${options.id}`, user);
+}
