@@ -4,12 +4,15 @@ import dayjs from "dayjs"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { FunctionComponent, useRef } from "react"
-import { httpSurveyReadAll, httpSurveyReadDetail } from "../../http/survey.http"
+import { httpSurveyReadDetail, httpSurveyReadDetailCustom } from "../../http/survey.http"
 import { boardDetailStyle } from "../../styles/survey-board/detail.style"
 import DefaultTemplate from "../../template/default.template"
 import { withSessionSsr } from "../../utils/session.util"
 import { MdDoubleArrow } from "react-icons/md";
 import Edit from "./edit"
+import { SSRPropsContext } from "../../types/util.type"
+import { useRecoilValue } from "recoil"
+import { authIsLogin } from "../../selectors/auth.selector"
 
 interface IBoardListIdProps {
   user: any,
@@ -18,10 +21,12 @@ interface IBoardListIdProps {
 
 /** 쿠키 매번 넣어줄 때는 이렇게 귀찮으니 interceptor로 구현*/
 export const getServerSideProps = withSessionSsr(
-  async function getServerSideProps({ req, params }) {
+  async function getServerSideProps({ req, params }: SSRPropsContext) {
     try {
-      console.debug('asdfasdf')
-      const surveyDetail = await httpSurveyReadDetail(req.session.user, params);
+      // const surveyDetail = await httpSurveyReadDetail(req.session.user, params);
+      const res = await req.ssrAxios(() => httpSurveyReadDetailCustom(params));
+      const surveyDetail = res.data;
+
       return {
         props: {
           user: req?.session?.user ?? null,
@@ -40,11 +45,10 @@ export const getServerSideProps = withSessionSsr(
 );
 
 const Detail: FunctionComponent<IBoardListIdProps> = ({ user, surveyDetail }) => {
-  console.debug(`SUJIN:: ~ surveyDetail`, surveyDetail)
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = useRef(null)
   const finalRef = useRef(null)
+  const isLogin = useRecoilValue(authIsLogin);
 
   return (
     <DefaultTemplate>
@@ -71,7 +75,7 @@ const Detail: FunctionComponent<IBoardListIdProps> = ({ user, surveyDetail }) =>
           </div>
           <div className="button-group">
             {
-              surveyDetail.userId === user?.id &&
+              isLogin && surveyDetail.userId === user?.id &&
               <>
                 <Button onClick={onOpen}>Edit</Button>
                 <Link href={'/'}>Delete</Link>
@@ -90,7 +94,6 @@ const Detail: FunctionComponent<IBoardListIdProps> = ({ user, surveyDetail }) =>
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Write</ModalHeader>
-              <ModalCloseButton />
               <ModalBody pb={6}>
                 <Edit onClose={onClose} surveyDetail={surveyDetail} />
               </ModalBody>

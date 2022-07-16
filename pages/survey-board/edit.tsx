@@ -7,7 +7,7 @@ import { boardEditStyle } from "../../styles/survey-board/edit.style";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import { IReqSurveyCreate } from "../../httpType/survey.type";
-import { httpSurveyCreate, httpSurveyUpdate } from "../../http/survey.http";
+import { httpSurveyUpdate } from "../../http/survey.http";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "../../atoms/auth.atom";
 
@@ -19,8 +19,6 @@ interface IEditInputs {
   link: string,
   description?: string
 }
-
-
 
 const Edit = (props: any) => {
   const [surveyDetail, setSurveyDetail] = useState(props.surveyDetail);
@@ -41,8 +39,6 @@ const Edit = (props: any) => {
         setSurveyDetail(updateRes);
         props.onClose();
       }
-
-
     } catch (error: any) {
       console.debug(`SUJIN:: ~ onSubmit ~ error`, JSON.stringify(error))
     }
@@ -112,7 +108,6 @@ const Edit = (props: any) => {
               />
             )}
           />
-
         </FormControl>
         {/* link */}
         <FormControl isRequired>

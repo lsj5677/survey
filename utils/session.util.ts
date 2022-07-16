@@ -1,5 +1,5 @@
 import { async } from "@firebase/util";
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { Axios, AxiosRequestConfig } from "axios";
 import { withIronSessionApiRoute, withIronSessionSsr } from "iron-session/next";
 import {
   GetServerSideProps,
@@ -8,6 +8,8 @@ import {
   NextApiHandler,
 } from "next";
 import { getServerSideProps } from "../pages/survey-board/list";
+import { SSRPropsContext } from "../types/util.type";
+import { getHostUrl } from "./http.util";
 
 const sessionOptions = {
   cookieName: "survey_user",
@@ -40,5 +42,28 @@ export function withSessionSsr<
   >(
     getServerSideProps: GetServerSideProps
   ) {
-  return withIronSessionSsr(getServerSideProps, sessionOptions);
+  return withIronSessionSsr(withAuth(getServerSideProps), sessionOptions);
 }
+
+const hostUrl = getHostUrl();
+
+export const withAuth = (getServerSideProps: GetServerSideProps) =>
+  async (context: SSRPropsContext) => {
+    const token = context?.req?.session?.user?.accessToken;
+    context.req.ssrAxios = getSsrAxios(token)
+
+    return await getServerSideProps(context);
+  }
+
+
+const getSsrAxios = (token?: string) =>
+  async (callback: () => AxiosRequestConfig<any> | Promise<AxiosRequestConfig<any>>) => {
+    const reqConfig = await callback();
+    reqConfig.baseURL = hostUrl;
+
+    // ironsession token 있으면 hedaers 정보 넣어주기
+    if (token) reqConfig.headers = { ...reqConfig.headers, Authorization: `Bearer ${token}` };
+
+    // axios 호출
+    return await axios(reqConfig)
+  }

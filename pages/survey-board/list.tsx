@@ -1,22 +1,19 @@
 /** @jsxImportSource @emotion/react */
-import { Button, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Table, TableContainer, Tag, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react"
-import { GetServerSideProps, GetServerSidePropsContext } from "next"
-import { FunctionComponent, useEffect, useRef, useState } from "react"
-import { httpSurveyReadAll } from "../../http/survey.http"
+import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Select, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react"
+import { FunctionComponent, useRef, useState } from "react"
+import { httpSurveyReadAll, httpSurveyReadAllCustom } from "../../http/survey.http"
 import DefaultTemplate from "../../template/default.template"
 import { boardListStyle } from "../../styles/survey-board/list.style"
 import { withIronSessionSsr } from "iron-session/next/dist"
 import { withSessionSsr } from "../../utils/session.util"
-import axios from "axios"
-import Link from "next/link"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { authIsLogin } from "../../selectors/auth.selector"
 import dayjs from 'dayjs'
 import Write from "./write"
 import { userInfoState } from "../../atoms/auth.atom"
-import { url } from "inspector"
 import { useRouter } from "next/router"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight, } from "react-icons/md";
+import { SSRPropsContext } from "../../types/util.type"
 
 interface IBoardListProps {
   user: any,
@@ -25,9 +22,15 @@ interface IBoardListProps {
 
 /** 쿠키 매번 넣어줄 때는 이렇게 귀찮으니 interceptor로 구현*/
 export const getServerSideProps = withSessionSsr(
-  async function getServerSideProps({ req, query }) {
+  // SSRPropsContext : custom으로 확장한 타입 -> req에 ssrAxios 추가
+  // user 따로 안넣어줘도 됨
+  async function getServerSideProps({ req, query }: SSRPropsContext) {
     try {
-      const surveyList = await httpSurveyReadAll(req.session.user, query);
+      // const surveyList = await httpSurveyReadAll(req.session.user, query);
+
+      const res = await req.ssrAxios(() => httpSurveyReadAllCustom(query));
+      const surveyList = res.data;
+
       return {
         props: {
           user: req?.session?.user ?? null,
@@ -35,6 +38,7 @@ export const getServerSideProps = withSessionSsr(
         }
       }
     } catch (error) {
+      console.debug(`SUJIN:: ~ getServerSideProps ~ error`, error)
       return {
         props: {
           user: req?.session?.user ?? null,
@@ -87,7 +91,7 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
     const options = { page, limit }
 
     setCurrentPage(page);
-    const surveyListAll = await httpSurveyReadAll(userInfo, options)
+    const surveyListAll = await httpSurveyReadAll(options)
     const newPagination = getTotalPages(surveyListAll.meta.currentPage, surveyListAll.meta.totalPages)
     setPaginate(newPagination)
     // list 새로 받아 옴
@@ -173,7 +177,6 @@ const List: FunctionComponent<IBoardListProps> = ({ user, surveyList }) => {
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Write</ModalHeader>
-              <ModalCloseButton />
               <ModalBody pb={6}>
                 <Write onClose={onClose} />
               </ModalBody>

@@ -38,3 +38,21 @@ export const httpDelete = async (url: string, userInfo?: AudioNode, config?: Axi
 export const http = async (input: RequestInfo, init?: RequestInit): Promise<Response> => {
   return await fetch(input, init);
 }
+
+export const setClientInterceptor = (token?: string) => {
+  axios.interceptors.request.use(
+    (config) => {
+      if (!config?.headers) return config;
+
+      if (!token) {
+        delete config.headers.Authorization;
+        return config;
+      }
+
+      config.headers['Authorization'] = `Bearer ${token}`
+
+      return config
+    },
+    (error) => Promise.reject(error)
+  )
+}
