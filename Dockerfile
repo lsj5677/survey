@@ -13,7 +13,7 @@ RUN rm -rf package-lock.json
 RUN npm run genFirebaseConfig
 RUN npm install
 RUN npm run build
-RUN npm run start
+RUN npm run pm2-next
 
 # Start Script
 # COPY start.sh /root/start.sh

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "genFirebaseConfig": "node gen-firebase-config.js",
-    "run:dev": "npm run genFirebaseConfig && npm run dev"
+    "run:dev": "npm run genFirebaseConfig && npm run dev",
+    "pm2-next": "next build && PORT=8080 pm2 start --name 'survey-client' ./node_modules/next/dist/bin/next"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.0.0",
