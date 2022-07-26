@@ -1,51 +1,76 @@
 /** @jsxImportSource @emotion/react */
 import { FormControl, FormLabel, Input, FormErrorMessage, Button, Link, InputRightElement, InputGroup } from '@chakra-ui/react'
-import { useRef, useState } from 'react'
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import DefaultTemplate from '../../client/template/default.template'
+import DefaultTemplate from '../../template/default.template'
+import { IReqUserCreate } from '../../httpType/user.type'
 import { signUpStyle } from '../../styles/account/sign-up.style'
-
-export interface IShowPassword {
-  password: boolean;
-  confirmPassword: boolean;
+import { EAUTH_ERROR } from '../../types/error.type';
+import { useRecoilState } from 'recoil';
+import { tempUserState } from '../../atoms/tempUser.atom';
+import { httpSignUp } from '../../http/auth.http';
+interface IShowPassword {
+  password: boolean,
+  confirmPassword: boolean,
 }
-
-interface IFormInputs {
-  email: string;
-  password: string | number;
-  confirmPassword: string | number;
-  name?: string | number;
+interface ISignUpInputs {
+  email: string,
+  password: string,
+  confirmPassword: string | number,
+  name?: string | number,
 }
-
-// useForm<IFormInputs> 로 하면 isInvalid error
-// yup을 같이 써야하는지?
-// const SignUp = () => {
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors, isSubmitting },
-//   } = useForm<IFormInputs>();
 
 const SignUp = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm();
 
+  const { register, handleSubmit, getValues, trigger, formState: { errors, isSubmitting, dirtyFields } } = useForm<ISignUpInputs>();
+  const router = useRouter();
+  const redirect = () => router.push('/account/email-sended');
   const [showPassword, setShowPassword] = useState<IShowPassword>({ password: false, confirmPassword: false });
+  const [tempUser, setTempUser] = useRecoilState(tempUserState);
 
-  const onSubmit = (data: any) => console.log(data);
-  // const onSubmit = (data: IShowPassword) => console.log(data);
+  const onSubmit = async ({ email, password, name }: ISignUpInputs) => {
+    try {
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      const user = userCredential.user;
+      console.debug(`SUJIN:: ~ onSubmit ~ user`, user)
+
+      sendEmailVerification(user)
+        .then(() => {
+          // alert("Email verification sent!");
+        });
+
+      const params: IReqUserCreate = { email, password, name, token: await user.getIdToken() };
+      const createRes = await httpSignUp(params)
+
+      setTempUser({ email });
+      redirect();
+
+    } catch (error: any) {
+      console.debug(`SUJIN:: ~ onSubmit ~ error`, JSON.stringify(error))
+      if (error.code === EAUTH_ERROR.ALREADY_USER) {
+        alert('이미 등록된 이메일 입니다.')
+      } else if (error.code === EAUTH_ERROR.INVALID_EMAIL) {
+        alert('유효하지 않은 이메일 입니다.')
+      } else {
+        alert('등록되지 않았습니다.')
+      }
+    }
+  }
+
+
+
 
   return (
     <DefaultTemplate>
       <div css={signUpStyle}>
         <div className="sign-up-container">
           <div className="sign-up-items">
-            <h1>Survey Logo</h1>
+            <h1 className="logo">SURV<span>e</span>e</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <FormControl isRequired isInvalid={errors.email}>
+              <FormControl isRequired isInvalid={dirtyFields.email && !!errors?.email}>
                 <FormLabel htmlFor='email'>Email</FormLabel>
                 <Input
                   id='email'
@@ -54,14 +79,14 @@ const SignUp = () => {
                   errorBorderColor='crimson'
                   {...register('email', {
                     required: 'This is required',
-
+                    onBlur: async () => await trigger('email')
                   })}
                 />
                 <FormErrorMessage>
                   {errors.email?.message}
                 </FormErrorMessage>
               </FormControl>
-              <FormControl mt={'1em'} isRequired>
+              <FormControl mt={'1em'} isRequired isInvalid={!!errors.password}>
                 <FormLabel htmlFor='password'>Password</FormLabel>
                 <InputGroup>
                   <Input
@@ -71,7 +96,7 @@ const SignUp = () => {
                     errorBorderColor='crimson'
                     {...register('password', {
                       required: 'This is required',
-                      minLength: { value: 8, message: 'Password must have at least 8 characters' },
+                      minLength: { value: 4, message: 'Password must have at least 6 characters' },
                       maxLength: { value: 12, message: 'Maximum length should be 12' },
                     })}
                   />
@@ -85,7 +110,7 @@ const SignUp = () => {
                   {errors.password && errors.password.message}
                 </FormErrorMessage>
               </FormControl>
-              <FormControl mt={'1em'} isRequired>
+              <FormControl mt={'1em'} isRequired isInvalid={!!errors.confirmPassword}>
                 <FormLabel htmlFor='confirmPassword'>Confirm Password</FormLabel>
                 <InputGroup>
                   <Input
@@ -95,9 +120,12 @@ const SignUp = () => {
                     errorBorderColor='crimson'
                     {...register('confirmPassword', {
                       required: 'This is required',
-                      minLength: { value: 8, message: 'Password must have at least 8 characters' },
+                      minLength: { value: 4, message: 'Password must have at least 6 characters' },
                       maxLength: { value: 12, message: 'Maximum length should be 12' },
-                      // validate: value => value === password.current || 'The passwords do not match'
+                      validate: (value: string | number) => {
+                        const passwordValue = getValues('password');
+                        return passwordValue !== value ? 'Password do not match!' : true;
+                      }
                     })}
                   />
                   <InputRightElement width='4.5em'>
@@ -115,13 +143,7 @@ const SignUp = () => {
                 <Input
                   id='name'
                   placeholder='Your name'
-                  {...register('name', {
-
-                  })}
                 />
-                <FormErrorMessage>
-                  {errors.name && errors.name.message}
-                </FormErrorMessage>
               </FormControl>
               <Button className="submit" mt={'4em'} type='submit' width='100%' isLoading={isSubmitting}>
                 Sign up
