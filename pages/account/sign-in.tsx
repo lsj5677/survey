@@ -78,7 +78,7 @@ const SignIn = () => {
       <div css={signInStyle}>
         <div className="sign-in-container">
           <div className="sign-in-items">
-            <h1 className="logo">SURV<span>e</span>Y</h1>
+            <h1 className="logo">SURV<span>e</span>e</h1>
             {/* {
               isLogin ? 'true' : 'false'
             } */}

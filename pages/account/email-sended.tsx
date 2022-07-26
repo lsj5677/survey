@@ -30,7 +30,7 @@ const EmailSended = () => {
     <DefaultTemplate>
       <div css={emailSendedStyle}>
         <div className="email-sended-container">
-          <h1 className="logo">SURV<span>e</span>Y</h1>
+          <h1 className="logo">SURV<span>e</span>e</h1>
           <h3>Please verify your email :)</h3>
           <p>
             You're almost there! We sent an email to<br />
