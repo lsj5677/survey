@@ -44,8 +44,8 @@ const Edit = (props: any) => {
     }
   }
 
-  const endDate = +surveyDetail.endDate;
-  const [startDate, setStartDate] = useState(new Date(endDate));
+  const endDate_ = +surveyDetail?.endDate;
+  const [startDate, setStartDate] = useState(new Date(endDate_));
 
   return (
     <div css={boardEditStyle}>

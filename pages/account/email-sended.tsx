@@ -33,10 +33,10 @@ const EmailSended = () => {
           <h1 className="logo">SURV<span>e</span>e</h1>
           <h3>Please verify your email :)</h3>
           <p>
-            You're almost there! We sent an email to<br />
+            You&apos;re almost there! We sent an email to<br />
             <span>{tempUser.email}</span><br />
             Just click on the link in that email to complete your signup. <br />
-            If you don't receive the verification email, <strong>check out some of the suggestions below:</strong>
+            If you don&apos;t receive the verification email, <strong>check out some of the suggestions below:</strong>
           </p>
           <ul>
             <li>

@@ -9,7 +9,7 @@ import { boardDetailStyle } from "../../styles/survey-board/detail.style"
 import DefaultTemplate from "../../template/default.template"
 import { withSessionSsr } from "../../utils/session.util"
 import { MdDoubleArrow } from "react-icons/md";
-import Edit from "./edit"
+import Edit from "../../ui/modal/edit"
 import { SSRPropsContext } from "../../types/util.type"
 import { useRecoilValue } from "recoil"
 import { authIsLogin } from "../../selectors/auth.selector"
@@ -69,7 +69,7 @@ const Detail: FunctionComponent<IBoardListIdProps> = ({ user, surveyDetail }) =>
                 surveyDetail.description ? surveyDetail.description : <span className="empty">설명이 없습니다.</span>
               }
             </p>
-            <a href={`https://${surveyDetail.link}`} target='_blank' className="go-to-link">
+            <a href={`https://${surveyDetail.link}`} target='_blank' rel='noreferrer' className="go-to-link">
               GO TO LINK <MdDoubleArrow />
             </a>
           </div>

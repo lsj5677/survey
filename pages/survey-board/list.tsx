@@ -9,7 +9,7 @@ import { withSessionSsr } from "../../utils/session.util"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { authIsLogin } from "../../selectors/auth.selector"
 import dayjs from 'dayjs'
-import Write from "./write"
+import Write from "../../ui/modal/write"
 import { userInfoState } from "../../atoms/auth.atom"
 import { useRouter } from "next/router"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight, } from "react-icons/md";

@@ -12,6 +12,7 @@ import { userInfoState } from "../../atoms/auth.atom";
 import { authIsLogin } from "../../selectors/auth.selector";
 import { httpLogin, httpSessionRegist } from "../../http/auth.http";
 import router from "next/router";
+import Link from "next/link";
 
 interface ISignInInputs {
   email: string,
@@ -130,8 +131,8 @@ const SignIn = () => {
                   <a href="">Find Password</a>
                 </div>
                 <div className="sign-up">
-                  <span>Don't have an account?</span>
-                  <a href="/account/sign-up">Sign up</a>
+                  <span>Don&apos;t have an account?</span>
+                  <Link href="/account/sign-up">Sign up</Link>
                 </div>
               </div>
             </div>
