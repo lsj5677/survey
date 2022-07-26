@@ -10,6 +10,7 @@ COPY . .
 # Build Project
 RUN rm -rf node_modules
 RUN rm -rf package-lock.json
+RUN npm run genFirebaseConfig
 RUN npm install
 RUN npm run build
 

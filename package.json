@@ -6,7 +6,9 @@
     "dev": "next dev -p 8080",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "genFirebaseConfig": "node gen-firebase-config.js",
+    "run:dev": "npm run genFirebaseConfig && npm run dev"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.0.0",
