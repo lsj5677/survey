@@ -4,7 +4,7 @@ const About = () => {
   return (
     <DefaultTemplate>
       <div className="about-container">
-
+        about!!!!!!!!!!!
       </div>
     </DefaultTemplate>
   )
