@@ -23,7 +23,7 @@ const Home: NextPage = () => {
               <div className="section-item text">
                 <h2>SURVeY</h2>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Lorem!!! ipsum dolor sit amet consectetur adipisicing elit.
                   Voluptatibus ducimus veritatis dolor sit! Autem quas laudantium
                   voluptatibus sequi, quam officia enim nostrum error blanditiis,
                   cum fugit libero? Omnis, quas. Unde ad earum deleniti esse dolore beatae
