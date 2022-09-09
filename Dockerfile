@@ -13,12 +13,12 @@ RUN rm -rf package-lock.json
 RUN npm run genFirebaseConfig
 RUN npm install
 RUN npm run build
-RUN npm run pm2-next
+# RUN npm run pm2-next
 
 # Start Script
-# COPY start.sh /root/start.sh
-# RUN ["chmod", "+x", "/root/start.sh"]
-# ENTRYPOINT /root/start.sh
+COPY start.sh /root/start.sh
+RUN ["chmod", "+x", "/root/start.sh"]
+ENTRYPOINT /root/start.sh
 
 RUN echo 안녕하세요
 
