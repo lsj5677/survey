@@ -5,15 +5,6 @@ import { getHostUrl, httpPost } from "../utils/http.util";
 
 const hostUrl = getHostUrl();
 
-export const httpLogin = async (params: IReqAuthLogin) => {
-  try {
-    const res = await httpPost('auth/sign-in', params);
-    return res.data;
-  } catch (error) {
-    throw error;
-  }
-}
-
 export const httpGetSession = async () => {
   try {
     const res = await axios.get(`${hostUrl}/api/session`);
@@ -41,6 +32,14 @@ export const httpSessionClear = async () => {
   }
 }
 
+export const httpLogin = async (params: IReqAuthLogin) => {
+  try {
+    const res = await httpPost('auth/sign-in', params);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export const httpSignUp = async (params: IReqUserCreate) => {
   try {
