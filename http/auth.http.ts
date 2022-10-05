@@ -1,13 +1,20 @@
 import axios from "axios";
 import { IReqAuthLogin } from "../httpType/auth.type";
 import { IReqUserCreate } from "../httpType/user.type";
-import { getHostUrl, httpPost } from "../utils/http.util";
+import { httpPost } from "../utils/http.util";
 
-const hostUrl = getHostUrl();
+const getUrl = () => {
+  console.debug(`SUJIN:: ~ url ~ process.env.STAGE`, process.env.STAGE)
+  return process.env.STAGE === 'production' ? 'https://survee.link' : 'http://localhost:8080';
+}
+const url = getUrl();
+
+console.debug(`SUJIN:: ~ url ~ process.env.STAGE`, process.env.STAGE)
+console.debug(`SUJIN:: ~ url ~ url`, url)
 
 export const httpGetSession = async () => {
   try {
-    const res = await axios.get(`${hostUrl}/api/session`);
+    const res = await axios.get(`${url}/api/session`);
     return res.data
   } catch (error) {
     throw error;
@@ -16,7 +23,7 @@ export const httpGetSession = async () => {
 
 export const httpSessionRegist = async (params: any) => {
   try {
-    const res = await axios.post(`${hostUrl}/api/session`, params);
+    const res = await axios.post(`${url}/api/session`, params);
     return res.data
   } catch (error) {
     throw error;
@@ -25,7 +32,7 @@ export const httpSessionRegist = async (params: any) => {
 
 export const httpSessionClear = async () => {
   try {
-    const res = await axios.delete(`${hostUrl}/api/session`)
+    const res = await axios.delete(`${url}/api/session`)
     return res.data;
   } catch (error) {
     throw error;

@@ -28,6 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     consoleDebugSetting(STAGE_TYPE.LOCAL)
   }
 
+  console.debug(`asdfasdf`, process)
 
   return (
     <RecoilRoot>

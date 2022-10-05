@@ -7,7 +7,7 @@ module.exports = {
       args: 'start -p 8080',
       autorestart: true,
       listen_timeout: 50000,
-      kill_timeout: 5000
+      kill_timeout: 5000,
     }
   ]
 }

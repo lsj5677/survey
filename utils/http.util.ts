@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios'
 
 export const getHostUrl = () => {
+  console.debug(`SUJIN:: ~ getHostUrl ~ process.env`, process)
   return process.env.STAGE === 'production' ? 'https://api.survee.link' : 'http://localhost:3000';
 }
 const hostUrl = getHostUrl();
