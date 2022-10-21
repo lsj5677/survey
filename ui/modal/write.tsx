@@ -31,9 +31,9 @@ const Write = (props: any) => {
     try {
       const params: IReqSurveyCreate = { title, time, target, endDate: endDate.getTime(), link, description }
       console.debug(`SUJIN:: ~ onSubmit ~ params`, params)
-      const createRes = await httpSurveyCreate(params, userInfo)
 
       if (window.confirm('등록하시겠습니까?')) {
+        const createRes = await httpSurveyCreate(params, userInfo)
         alert('등록되었습니다')
         props.onClose();
       }
