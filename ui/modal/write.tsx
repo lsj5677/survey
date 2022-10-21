@@ -34,6 +34,7 @@ const Write = (props: any) => {
 
       if (window.confirm('등록하시겠습니까?')) {
         const createRes = await httpSurveyCreate(params, userInfo)
+        console.debug(`SUJIN:: ~ asdfasdfasdad`)
         alert('등록되었습니다')
         props.onClose();
       }
