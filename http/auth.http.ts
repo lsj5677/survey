@@ -10,7 +10,6 @@ const getUrl = () => {
 const url = getUrl();
 
 console.debug(`SUJIN:: ~ url ~ process.env.STAGE`, process.env.STAGE)
-console.debug(`SUJIN:: ~ url ~ url`, url)
 
 export const httpGetSession = async () => {
   try {
