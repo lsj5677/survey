@@ -13,7 +13,7 @@ console.debug(`SUJIN:: ~ url ~ process.env.STAGE`, process.env.STAGE)
 
 export const httpGetSession = async () => {
   try {
-    const res = await axios.get(`${url}/api/session`);
+    const res = await axios.get(`/api/session`);
     return res.data
   } catch (error) {
     throw error;
@@ -22,7 +22,7 @@ export const httpGetSession = async () => {
 
 export const httpSessionRegist = async (params: any) => {
   try {
-    const res = await axios.post(`${url}/api/session`, params);
+    const res = await axios.post(`/api/session`, params);
     return res.data
   } catch (error) {
     throw error;
@@ -31,7 +31,7 @@ export const httpSessionRegist = async (params: any) => {
 
 export const httpSessionClear = async () => {
   try {
-    const res = await axios.delete(`${url}/api/session`)
+    const res = await axios.delete(`/api/session`)
     return res.data;
   } catch (error) {
     throw error;
